@@ -1,0 +1,52 @@
+# Build
+build/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gradle
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+!gradle-wrapper.properties
+
+# Node
+node_modules/
+npm-debug.log
+dist/
+.env.local
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Logs
+logs/
+*.log
+
+# Test coverage
+coverage/
+*.lcov
+htmlcov/
+
+# Misc
+target/
+*.orig
+.classpath
+.project
+.settings/
