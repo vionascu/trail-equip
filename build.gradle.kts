@@ -35,7 +35,6 @@ subprojects {
     spotless {
         java {
             importOrder()
-            removeUnusedImports()
             palantirJavaFormat()
             endWithNewline()
         }
