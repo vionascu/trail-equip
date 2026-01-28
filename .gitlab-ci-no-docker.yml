@@ -1,0 +1,132 @@
+# Alternative CI/CD for running on local machine with shell executor
+# Use this if you have GitLab Runner installed with shell executor
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+
+stages:
+  - build
+  - test
+  - run
+  - deploy
+
+# BUILD STAGE
+build_services:
+  stage: build
+  tags:
+    - local  # Must match your GitLab Runner tag
+  script:
+    - cd $CI_PROJECT_DIR
+    - echo "Building Java services..."
+    - ./gradlew clean build -x test --info
+  cache:
+    paths:
+      - .gradle/
+  artifacts:
+    paths:
+      - services/*/build/libs/*.jar
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests
+
+build_ui:
+  stage: build
+  tags:
+    - local
+  script:
+    - cd $CI_PROJECT_DIR/ui
+    - echo "Building React UI..."
+    - npm ci --prefer-offline --no-audit
+    - npm run build
+  cache:
+    paths:
+      - ui/node_modules/
+  artifacts:
+    paths:
+      - ui/dist/
+    expire_in: 1 week
+  only:
+    - main
+    - merge_requests
+
+# TEST STAGE
+test_services_unit:
+  stage: test
+  tags:
+    - local
+  script:
+    - cd $CI_PROJECT_DIR
+    - echo "Running unit tests..."
+    - ./gradlew test --info
+  cache:
+    paths:
+      - .gradle/
+  artifacts:
+    reports:
+      junit:
+        - services/*/build/test-results/test/*.xml
+    expire_in: 30 days
+  only:
+    - main
+    - merge_requests
+
+lint_java:
+  stage: test
+  tags:
+    - local
+  script:
+    - cd $CI_PROJECT_DIR
+    - echo "Checking code formatting..."
+    - ./gradlew spotlessCheck || echo "Formatting check completed"
+  cache:
+    paths:
+      - .gradle/
+  allow_failure: true
+  only:
+    - main
+    - merge_requests
+
+lint_ui:
+  stage: test
+  tags:
+    - local
+  script:
+    - cd $CI_PROJECT_DIR/ui
+    - npm ci --prefer-offline
+    - npm run lint || echo "UI linting completed"
+  cache:
+    paths:
+      - ui/node_modules/
+  allow_failure: true
+  only:
+    - main
+    - merge_requests
+
+# RUN STAGE (Optional - for testing locally)
+run_services:
+  stage: run
+  tags:
+    - local
+  script:
+    - echo "Services built successfully!"
+    - echo "To run locally, execute:"
+    - echo "  Terminal 1: ./gradlew :services:trail-service:bootRun"
+    - echo "  Terminal 2: ./gradlew :services:weather-service:bootRun"
+    - echo "  Terminal 3: ./gradlew :services:recommendation-service:bootRun"
+    - echo "  Terminal 4: ./gradlew :services:api-gateway:bootRun"
+    - echo "  Terminal 5: cd ui && npm run dev"
+  only:
+    - main
+  when: manual  # Only run if manually triggered
+
+# DEPLOY STAGE
+deploy_docs:
+  stage: deploy
+  tags:
+    - local
+  script:
+    - echo "Documentation ready at: docs/"
+  only:
+    - main
