@@ -15,7 +15,8 @@ build_services:
   image: gradle:8.5-jdk21-jammy
   script:
     - cd $CI_PROJECT_DIR
-    - gradle clean build -x test --info
+    - chmod +x ./gradlew
+    - ./gradlew clean build -x test --info
   cache:
     paths:
       - .gradle/
@@ -51,7 +52,8 @@ test_services_unit:
   image: gradle:8.5-jdk21-jammy
   script:
     - cd $CI_PROJECT_DIR
-    - gradle test --info
+    - chmod +x ./gradlew
+    - ./gradlew test --info
   cache:
     paths:
       - .gradle/
@@ -69,7 +71,8 @@ lint_java:
   image: gradle:8.5-jdk21-jammy
   script:
     - cd $CI_PROJECT_DIR
-    - gradle spotlessCheck || echo "Formatting check completed"
+    - chmod +x ./gradlew
+    - ./gradlew spotlessCheck || echo "Formatting check completed"
   cache:
     paths:
       - .gradle/
