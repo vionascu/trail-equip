@@ -27,6 +27,7 @@ allprojects {
             importOrder()
             removeUnusedImports()
             palantirJavaFormat()
+            endWithNewline()
         }
     }
 }
@@ -36,20 +37,19 @@ subprojects {
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
 
+    dependencyManagement {
+        imports {
+            mavenBom("org.springframework.cloud:spring-cloud-dependencies:2023.0.0")
+        }
+    }
+
     dependencies {
         // Core Spring Boot
-        implementation("org.springframework.boot:spring-boot-starter-web")
-        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-actuator")
         implementation("org.springframework.boot:spring-boot-starter-validation")
 
-        // Database
-        implementation("org.postgresql:postgresql")
-        implementation("org.hibernate.orm:hibernate-spatial")
-
         // APIs & Serialization
         implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-        implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
 
         // Logging
         implementation("org.springframework.boot:spring-boot-starter-logging")
@@ -61,7 +61,6 @@ subprojects {
         testImplementation("org.mockito:mockito-core")
         testImplementation("org.mockito:mockito-junit-jupiter")
         testImplementation("org.testcontainers:testcontainers:1.19.3")
-        testImplementation("org.testcontainers:postgresql:1.19.3")
         testImplementation("org.testcontainers:junit-jupiter:1.19.3")
     }
 
