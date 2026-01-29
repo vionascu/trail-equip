@@ -83,8 +83,7 @@ public class DifficultyClassifier {
     private boolean hasForbiddenTerrainForMedium(Trail trail) {
         if (trail.getTerrain() == null) return false;
         for (String terrain : trail.getTerrain()) {
-            if (terrain.equalsIgnoreCase("via_ferrata")
-                    || terrain.equalsIgnoreCase("technical_climbing")) {
+            if (terrain.equalsIgnoreCase("via_ferrata") || terrain.equalsIgnoreCase("technical_climbing")) {
                 return true;
             }
         }

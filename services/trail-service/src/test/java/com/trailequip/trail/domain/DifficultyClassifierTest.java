@@ -2,11 +2,10 @@ package com.trailequip.trail.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
-
 import com.trailequip.trail.domain.model.Difficulty;
 import com.trailequip.trail.domain.model.Trail;
 import com.trailequip.trail.domain.service.DifficultyClassifier;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
