@@ -1,11 +1,16 @@
 package com.trailequip.trail.domain.model;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public class Waypoint {
     private Double latitude;
     private Double longitude;
     private Integer elevation;
     private String name;
     private String description;
+
+    public Waypoint() {}
 
     public Waypoint(Double latitude, Double longitude, Integer elevation) {
         this.latitude = latitude;

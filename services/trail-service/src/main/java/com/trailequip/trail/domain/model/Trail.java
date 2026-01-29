@@ -1,26 +1,53 @@
 package com.trailequip.trail.domain.model;
 
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "trails")
 public class Trail {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @Column(nullable = false)
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
+    @Column(nullable = false)
     private Double distance;
+
     private Integer elevationGain;
     private Integer elevationLoss;
     private Integer durationMinutes;
     private Double maxSlope;
     private Double avgSlope;
+
+    @ElementCollection
+    @CollectionTable(name = "trail_terrain")
     private List<String> terrain;
+
+    @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
+
+    @ElementCollection
+    @CollectionTable(name = "trail_hazards")
     private List<String> hazards;
+
+    @ElementCollection
+    @CollectionTable(name = "trail_waypoints")
     private List<Waypoint> waypoints;
+
     private String source;
+
+    @Column(nullable = false, updatable = false)
     private Instant createdAt;
+
     private Instant updatedAt;
 
     public Trail() {}

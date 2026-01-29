@@ -58,7 +58,7 @@ if ! command -v npm &> /dev/null; then
     exit 1
 fi
 
-if ! psql -U postgres -lqt 2>/dev/null | grep -q trailequip; then
+if ! psql -lqt 2>/dev/null | grep -q trailequip; then
     echo -e "${RED}✗ Database 'trailequip' not found.${NC}"
     echo -e "${YELLOW}  Run this first:${NC}"
     echo -e "    createdb trailequip"
