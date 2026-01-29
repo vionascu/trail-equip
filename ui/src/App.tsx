@@ -1,7 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import React, { useState, useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import './App.css';
+
+// Component to handle map invalidation
+function MapInvalidator({ selectedTrail }: { selectedTrail: any }) {
+  const map = useMap();
+
+  useEffect(() => {
+    // Invalidate map size and fit bounds after state changes
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 100);
+  }, [map, selectedTrail]);
+
+  return null;
+}
 
 // Fix for Leaflet icon issue
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -275,7 +289,9 @@ export default function App() {
             center={mapCenter}
             zoom={12}
             style={{ height: '100%', width: '100%' }}
+            key={`map-${selectedTrail?.id}`}
           >
+            <MapInvalidator selectedTrail={selectedTrail} />
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -336,18 +352,44 @@ export default function App() {
                   </Popup>
                 </Marker>
 
-                {/* Highlight selected trail with circle */}
+                {/* Highlight selected trail with prominent red circle */}
                 {selectedTrail?.id === trail.id && (
-                  <Circle
-                    center={[trail.latitude, trail.longitude]}
-                    radius={800}
-                    pathOptions={{
-                      color: DIFFICULTY_COLORS[trail.difficulty],
-                      weight: 2,
-                      opacity: 0.3,
-                      fillOpacity: 0.1
-                    }}
-                  />
+                  <>
+                    <Circle
+                      center={[trail.latitude, trail.longitude]}
+                      radius={1200}
+                      pathOptions={{
+                        color: '#FF0000',
+                        weight: 4,
+                        opacity: 0.8,
+                        fillOpacity: 0.15
+                      }}
+                    />
+                    <Marker
+                      position={[trail.latitude, trail.longitude]}
+                      icon={L.divIcon({
+                        className: 'custom-marker-selected',
+                        html: `<div style="
+                          background-color: #FF0000;
+                          border: 4px solid white;
+                          border-radius: 50%;
+                          width: 40px;
+                          height: 40px;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          color: white;
+                          font-weight: bold;
+                          font-size: 18px;
+                          box-shadow: 0 0 0 2px #FF0000, 0 4px 8px rgba(0,0,0,0.4);
+                          cursor: pointer;
+                          animation: pulse 2s infinite;
+                        ">★</div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
+                      })}
+                    />
+                  </>
                 )}
               </React.Fragment>
             ))}

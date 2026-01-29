@@ -171,3 +171,16 @@ div[style*="overflowY: auto"] {
   scrollbar-width: thin;
   scrollbar-color: #888 #f1f1f1;
 }
+
+/* Pulsing animation for selected trail marker */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 2px #FF0000, 0 0 0 8px rgba(255, 0, 0, 0.4), 0 4px 8px rgba(0,0,0,0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 2px #FF0000, 0 0 0 16px rgba(255, 0, 0, 0.2), 0 4px 8px rgba(0,0,0,0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 2px #FF0000, 0 0 0 8px rgba(255, 0, 0, 0.4), 0 4px 8px rgba(0,0,0,0.4);
+  }
+}
