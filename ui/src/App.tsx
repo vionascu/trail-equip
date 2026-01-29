@@ -411,6 +411,47 @@ export default function App() {
                       </>
                     )}
 
+                    {/* Trail marking badges along the path (like topographic map) */}
+                    {trail.waypoints && trail.waypoints.length > 4 && trail.trailMarking && TRAIL_MARKING_COLORS[trail.trailMarking] && (() => {
+                      const waypoints = trail.waypoints!;
+                      const trailMarking = trail.trailMarking!;
+                      const marking = TRAIL_MARKING_COLORS[trailMarking];
+                      return (
+                        <>
+                          {waypoints.map((waypoint, idx) => {
+                            // Show marking badges every 4-5 waypoints
+                            if (idx % 4 !== 0 || idx === 0 || idx === waypoints.length - 1) return null;
+                            return (
+                              <Marker
+                                key={`marking-${idx}`}
+                                position={[waypoint[0], waypoint[1]] as L.LatLngTuple}
+                                icon={L.divIcon({
+                                  className: 'trail-marking-badge',
+                                  html: `<div style="
+                                    background-color: ${marking.bg};
+                                    color: ${marking.text};
+                                    border: 2px solid white;
+                                    border-radius: 3px;
+                                    width: 24px;
+                                    height: 24px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    font-weight: bold;
+                                    font-size: 14px;
+                                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                    cursor: pointer;
+                                  ">${marking.symbol}</div>`,
+                                  iconSize: [24, 24],
+                                  iconAnchor: [12, 12]
+                                })}
+                              />
+                            );
+                          })}
+                        </>
+                      );
+                    })()}
+
                     {/* Start marker - Green circle with accent */}
                     <Marker
                       position={trail.waypoints && trail.waypoints.length > 0 ? (trail.waypoints[0] as L.LatLngTuple) : ([trail.latitude, trail.longitude] as L.LatLngTuple)}
