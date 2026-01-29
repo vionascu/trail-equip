@@ -1,13 +1,12 @@
 package com.trailequip.trail.adapter.rest;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
 import com.trailequip.trail.application.service.TrailApplicationService;
 import com.trailequip.trail.domain.model.Trail;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +55,8 @@ public class TrailController {
             @RequestParam double centerLon,
             @RequestParam(defaultValue = "5") double radiusKm,
             @RequestParam(required = false) String difficulty) {
-        List<Trail> suggestions = trailApplicationService.suggestTrailsInArea(centerLat, centerLon, radiusKm, difficulty);
+        List<Trail> suggestions =
+                trailApplicationService.suggestTrailsInArea(centerLat, centerLon, radiusKm, difficulty);
         return ResponseEntity.ok(suggestions);
     }
 

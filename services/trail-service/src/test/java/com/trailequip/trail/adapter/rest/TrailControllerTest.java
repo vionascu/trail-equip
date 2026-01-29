@@ -23,6 +23,7 @@ import org.springframework.boot.test.mock.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+
 @WebMvcTest(TrailController.class)
 public class TrailControllerTest {
 

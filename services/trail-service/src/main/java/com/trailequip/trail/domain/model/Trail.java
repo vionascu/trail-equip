@@ -1,10 +1,9 @@
 package com.trailequip.trail.domain.model;
 
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "trails")
