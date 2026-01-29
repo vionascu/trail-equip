@@ -26,6 +26,46 @@ L.Icon.Default.mergeOptions({
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
 });
 
+// Catmull-Rom spline interpolation for smooth curves (like Waze/Google Maps)
+function interpolateWaypoints(waypoints: number[][], factor: number = 5): number[][] {
+  if (waypoints.length < 2) return waypoints;
+
+  const interpolated: number[][] = [];
+
+  for (let i = 0; i < waypoints.length - 1; i++) {
+    interpolated.push(waypoints[i]);
+
+    // Get control points for cubic Hermite interpolation
+    const p0 = waypoints[Math.max(0, i - 1)];
+    const p1 = waypoints[i];
+    const p2 = waypoints[i + 1];
+    const p3 = waypoints[Math.min(waypoints.length - 1, i + 2)];
+
+    // Generate intermediate points
+    for (let t = 1; t < factor; t++) {
+      const s = t / factor;
+      const s2 = s * s;
+      const s3 = s2 * s;
+
+      // Catmull-Rom matrix coefficients
+      const a0 = -0.5 * s3 + s2 - 0.5 * s;
+      const a1 = 1.5 * s3 - 2.5 * s2 + 1.0;
+      const a2 = -1.5 * s3 + 2.0 * s2 + 0.5 * s;
+      const a3 = 0.5 * s3 - 0.5 * s2;
+
+      const lat = a0 * p0[0] + a1 * p1[0] + a2 * p2[0] + a3 * p3[0];
+      const lng = a0 * p0[1] + a1 * p1[1] + a2 * p2[1] + a3 * p3[1];
+
+      interpolated.push([lat, lng]);
+    }
+  }
+
+  // Add the last waypoint
+  interpolated.push(waypoints[waypoints.length - 1]);
+
+  return interpolated;
+}
+
 // Bucegi Mountains Hiking Trails - 11 Major Routes with GPS Data
 const BUCEGI_TRAILS = [
   {id:'1',name:'Omu Peak Direct',description:'Direct ascent to Omu Peak (2504m) via Plaiul Foii',distance:8.2,elevationGain:680,elevationLoss:680,durationMinutes:240,maxSlope:42.0,avgSlope:18.5,terrain:['forest','meadow','rocky'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.3585,longitude:25.5050,waypoints:[[45.3200,25.4800],[45.3280,25.4850],[45.3350,25.4920],[45.3420,25.4980],[45.3480,25.5020],[45.3540,25.5040],[45.3585,25.5050]],trailMarking:'YELLOW_RECTANGLE',isCircular:false,description_extended:'Highest peak in Bucegi with 360° panoramic views'},
@@ -332,69 +372,96 @@ export default function App() {
                   </Popup>
                 </Marker>
 
-                {/* Highlight selected trail with red polyline and markers */}
+                {/* Highlight selected trail with smooth polyline and markers */}
                 {selectedTrail?.id === trail.id && (
                   <>
-                    {/* Draw the full trail path as a red line */}
+                    {/* Draw the full trail path with smooth curve interpolation */}
                     {trail.waypoints && trail.waypoints.length > 0 && (
-                      <Polyline
-                        positions={trail.waypoints as L.LatLngTuple[]}
-                        pathOptions={{
-                          color: '#FF0000',
-                          weight: 4,
-                          opacity: 0.9,
-                          lineCap: 'round',
-                          lineJoin: 'round'
-                        }}
-                      />
+                      <>
+                        {/* Shadow/border effect for depth (Google Maps style) */}
+                        <Polyline
+                          positions={interpolateWaypoints(trail.waypoints, 6) as L.LatLngTuple[]}
+                          pathOptions={{
+                            color: 'rgba(0, 0, 0, 0.2)',
+                            weight: 8,
+                            opacity: 0.4,
+                            lineCap: 'round',
+                            lineJoin: 'round',
+                            dashArray: undefined
+                          }}
+                        />
+                        {/* Main trail line (Waze/Google Maps style red) */}
+                        <Polyline
+                          positions={interpolateWaypoints(trail.waypoints, 6) as L.LatLngTuple[]}
+                          pathOptions={{
+                            color: '#FF2E2E',
+                            weight: 5,
+                            opacity: 0.95,
+                            lineCap: 'round',
+                            lineJoin: 'round'
+                          }}
+                        />
+                        {/* Highlight/glow effect */}
+                        <Polyline
+                          positions={interpolateWaypoints(trail.waypoints, 6) as L.LatLngTuple[]}
+                          pathOptions={{
+                            color: '#FFFF00',
+                            weight: 2,
+                            opacity: 0.4,
+                            lineCap: 'round',
+                            lineJoin: 'round'
+                          }}
+                        />
+                      </>
                     )}
 
-                    {/* Start marker */}
+                    {/* Start marker - Green circle with accent */}
                     <Marker
                       position={trail.waypoints && trail.waypoints.length > 0 ? (trail.waypoints[0] as L.LatLngTuple) : ([trail.latitude, trail.longitude] as L.LatLngTuple)}
                       icon={L.divIcon({
                         className: 'custom-marker-start',
                         html: `<div style="
-                          background-color: #00CC00;
-                          border: 3px solid white;
+                          background: linear-gradient(135deg, #00CC00 0%, #009900 100%);
+                          border: 4px solid white;
                           border-radius: 50%;
-                          width: 32px;
-                          height: 32px;
+                          width: 40px;
+                          height: 40px;
                           display: flex;
                           align-items: center;
                           justify-content: center;
                           color: white;
                           font-weight: bold;
-                          font-size: 16px;
-                          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-                        ">S</div>`,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 16]
+                          font-size: 20px;
+                          box-shadow: 0 0 0 2px rgba(0,200,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
+                          position: relative;
+                        ">●</div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
                       })}
                     />
 
-                    {/* End marker */}
+                    {/* End marker - Red flag with pulsing animation */}
                     <Marker
                       position={trail.waypoints && trail.waypoints.length > 0 ? (trail.waypoints[trail.waypoints.length - 1] as L.LatLngTuple) : ([trail.latitude, trail.longitude] as L.LatLngTuple)}
                       icon={L.divIcon({
                         className: 'custom-marker-end',
                         html: `<div style="
-                          background-color: #FF0000;
-                          border: 3px solid white;
+                          background: linear-gradient(135deg, #FF0000 0%, #CC0000 100%);
+                          border: 4px solid white;
                           border-radius: 50%;
-                          width: 32px;
-                          height: 32px;
+                          width: 40px;
+                          height: 40px;
                           display: flex;
                           align-items: center;
                           justify-content: center;
                           color: white;
                           font-weight: bold;
-                          font-size: 16px;
-                          box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-                          animation: pulse 2s infinite;
-                        ">E</div>`,
-                        iconSize: [32, 32],
-                        iconAnchor: [16, 16]
+                          font-size: 20px;
+                          box-shadow: 0 0 0 2px rgba(255,0,0,0.3), 0 4px 12px rgba(0,0,0,0.4);
+                          animation: pulseWaze 1.5s infinite;
+                        ">▼</div>`,
+                        iconSize: [40, 40],
+                        iconAnchor: [20, 20]
                       })}
                     />
                   </>

@@ -184,3 +184,19 @@ div[style*="overflowY: auto"] {
     box-shadow: 0 0 0 2px #FF0000, 0 0 0 8px rgba(255, 0, 0, 0.4), 0 4px 8px rgba(0,0,0,0.4);
   }
 }
+
+/* Waze/Google Maps style pulsing for end marker */
+@keyframes pulseWaze {
+  0% {
+    box-shadow: 0 0 0 2px rgba(255,0,0,0.3), 0 0 0 8px rgba(255, 0, 0, 0.2), 0 4px 12px rgba(0,0,0,0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 2px rgba(255,0,0,0.5), 0 0 0 16px rgba(255, 0, 0, 0.1), 0 4px 12px rgba(0,0,0,0.4);
+    transform: scale(1.05);
+  }
+  100% {
+    box-shadow: 0 0 0 2px rgba(255,0,0,0.3), 0 0 0 8px rgba(255, 0, 0, 0.2), 0 4px 12px rgba(0,0,0,0.4);
+    transform: scale(1);
+  }
+}
