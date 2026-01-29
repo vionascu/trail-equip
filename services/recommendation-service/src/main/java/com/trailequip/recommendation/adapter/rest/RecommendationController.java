@@ -22,13 +22,13 @@ public class RecommendationController {
     @PostMapping("/equipment")
     @Operation(summary = "Get equipment recommendations")
     public ResponseEntity<Map<String, Object>> getEquipmentRecommendations(
-        @RequestBody Map<String, String> request) {
+            @RequestBody Map<String, String> request) {
         String trailId = request.get("trailId");
         String forecastStart = request.get("forecastStart");
         String forecastEnd = request.get("forecastEnd");
 
         Map<String, Object> recommendations =
-            equipmentService.recommend(UUID.fromString(trailId), forecastStart, forecastEnd);
+                equipmentService.recommend(UUID.fromString(trailId), forecastStart, forecastEnd);
 
         return ResponseEntity.ok(recommendations);
     }

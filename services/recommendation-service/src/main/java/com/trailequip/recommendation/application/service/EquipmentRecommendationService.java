@@ -24,8 +24,12 @@ public class EquipmentRecommendationService {
             Map.of("name", "Microspikes", "reason", "Low temp + precipitation = ice risk")
         }));
 
-        return Map.of("equipment", equipment, "warnings",
-            new String[] {"High wind expected on ridges"}, "summary",
-            "Moderate conditions; bring layered system and rain protection");
+        return Map.of(
+                "equipment",
+                equipment,
+                "warnings",
+                new String[] {"High wind expected on ridges"},
+                "summary",
+                "Moderate conditions; bring layered system and rain protection");
     }
 }
