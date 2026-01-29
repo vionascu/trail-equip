@@ -173,15 +173,23 @@ export default function App() {
         const response = await fetch('/api/v1/trails');
         if (response.ok) {
           const data = await response.json();
-          // Check if API data has the required geographic properties
-          if (Array.isArray(data) && data.length > 0 && data[0].latitude && data[0].longitude) {
-            // API data has coordinates, use it
+          // Check if API data has the required geographic properties and waypoints
+          if (
+            Array.isArray(data) &&
+            data.length > 0 &&
+            data[0].latitude &&
+            data[0].longitude &&
+            data[0].waypoints &&
+            Array.isArray(data[0].waypoints) &&
+            data[0].waypoints.length > 2
+          ) {
+            // API data has complete trail data with waypoints
             setTrails(data);
             setSelectedTrail(data[0]);
             setError(null);
           } else {
-            // API data missing coordinates, use mock data instead
-            console.log('API data incomplete, using mock data');
+            // API data missing waypoints, use mock data instead
+            console.log('API data incomplete (missing waypoints), using mock data');
             setTrails(BUCEGI_TRAILS);
             setSelectedTrail(BUCEGI_TRAILS[0]);
           }
