@@ -113,8 +113,7 @@ public class RecommendationControllerTest {
     @Test
     public void testGetEquipmentRecommendationsForEasyTrail() throws Exception {
         Map<String, Object> easyRecommendation = new HashMap<>(equipmentRecommendation);
-        easyRecommendation.put("recommendedGear",
-                Arrays.asList("Casual Hiking Shoes", "Light Jacket", "Water Bottle"));
+        easyRecommendation.put("recommendedGear", Arrays.asList("Casual Hiking Shoes", "Light Jacket", "Water Bottle"));
 
         when(equipmentRecommendationService.recommendEquipment(any())).thenReturn(easyRecommendation);
 
@@ -122,8 +121,8 @@ public class RecommendationControllerTest {
         easyRequest.put("trailDifficulty", "EASY");
 
         mockMvc.perform(post("/api/v1/recommendations/equipment")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(easyRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(easyRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.recommendedGear", hasSize(3)));
 
@@ -133,8 +132,9 @@ public class RecommendationControllerTest {
     @Test
     public void testGetEquipmentRecommendationsForExtremeWeather() throws Exception {
         Map<String, Object> extremeWeatherRecommendation = new HashMap<>(equipmentRecommendation);
-        extremeWeatherRecommendation.put("warnings", Arrays.asList("EXTREME: High wind speed",
-                "Risk of hypothermia", "Trail may be impassable", "Consider turning back"));
+        extremeWeatherRecommendation.put("warnings",
+                Arrays.asList("EXTREME: High wind speed", "Risk of hypothermia", "Trail may be impassable",
+                        "Consider turning back"));
 
         when(equipmentRecommendationService.recommendEquipment(any())).thenReturn(extremeWeatherRecommendation);
 
@@ -142,8 +142,8 @@ public class RecommendationControllerTest {
         extremeRequest.put("windSpeed", 50);
 
         mockMvc.perform(post("/api/v1/recommendations/equipment")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(extremeRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(extremeRequest)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.warnings", hasSize(4)));
 
@@ -170,8 +170,8 @@ public class RecommendationControllerTest {
         invalidRequest.put("trailDifficulty", "INVALID_DIFFICULTY");
 
         mockMvc.perform(post("/api/v1/recommendations/equipment")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(invalidRequest)))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidRequest)))
                 .andExpect(status().isBadRequest());
     }
 
