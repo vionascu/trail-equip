@@ -10,6 +10,7 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trailequip.weather.application.service.WeatherApplicationService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +46,16 @@ public class WeatherControllerTest {
 
     @Test
     public void testGetWeatherForecast() throws Exception {
-        when(weatherApplicationService.getWeatherForecast(45.5, 25.3, LocalDate.now(), LocalDate.now().plusDays(7)))
+        when(weatherApplicationService.getWeatherForecast(
+                        45.5, 25.3, LocalDate.now(), LocalDate.now().plusDays(7)))
                 .thenReturn(sampleWeather);
 
         mockMvc.perform(get("/api/v1/weather/forecast")
-                .param("latitude", "45.5")
-                .param("longitude", "25.3")
-                .param("startDate", LocalDate.now().toString())
-                .param("endDate", LocalDate.now().plusDays(7).toString())
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("latitude", "45.5")
+                        .param("longitude", "25.3")
+                        .param("startDate", LocalDate.now().toString())
+                        .param("endDate", LocalDate.now().plusDays(7).toString())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.temperature").value(15.0))
                 .andExpect(jsonPath("$.wind_speed").value(10.0))
@@ -68,9 +70,9 @@ public class WeatherControllerTest {
                 .thenReturn(sampleWeather);
 
         mockMvc.perform(get("/api/v1/weather/forecast")
-                .param("latitude", "45.5")
-                .param("longitude", "25.3")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("latitude", "45.5")
+                        .param("longitude", "25.3")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.temperature").value(15.0));
 
@@ -88,7 +90,7 @@ public class WeatherControllerTest {
                 .thenReturn(cacheStats);
 
         mockMvc.perform(get("/api/v1/weather/cache/stats")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total_cached_forecasts").value(42))
                 .andExpect(jsonPath("$.cache_hit_rate").value(0.85));
@@ -101,7 +103,7 @@ public class WeatherControllerTest {
         doNothing().when(weatherApplicationService).clearCache();
 
         mockMvc.perform(delete("/api/v1/weather/cache")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
 
         verify(weatherApplicationService, times(1)).clearCache();
@@ -122,8 +124,8 @@ public class WeatherControllerTest {
                 .thenReturn(multiLocationWeather);
 
         mockMvc.perform(post("/api/v1/weather/multi-location")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new double[][]{{45.5, 25.3}, {44.5, 24.3}})))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new double[][] {{45.5, 25.3}, {44.5, 24.3}})))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.location_1.temperature").value(15.0))
                 .andExpect(jsonPath("$.location_2.temperature").value(12.0));
@@ -134,9 +136,9 @@ public class WeatherControllerTest {
     @Test
     public void testWeatherForecastInvalidCoordinates() throws Exception {
         mockMvc.perform(get("/api/v1/weather/forecast")
-                .param("latitude", "999")
-                .param("longitude", "999")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .param("latitude", "999")
+                        .param("longitude", "999")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
     }
 }

@@ -39,10 +39,7 @@ public class WeatherApplicationService {
                     "cacheValidUntil",
                     ZonedDateTime.now(ZoneId.of("UTC")).plusHours(6).toString());
         } catch (Exception e) {
-            return Map.of(
-                    "error", "Unable to fetch forecast",
-                    "message", e.getMessage(),
-                    "cached", true);
+            return Map.of("error", "Unable to fetch forecast", "message", e.getMessage(), "cached", true);
         }
     }
 }

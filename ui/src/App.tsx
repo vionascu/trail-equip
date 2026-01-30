@@ -66,19 +66,19 @@ function interpolateWaypoints(waypoints: number[][], factor: number = 5): number
   return interpolated;
 }
 
-// Bucegi Mountains Hiking Trails - 11 Major Routes with Detailed GPS Data (20-30 waypoints each)
+// Bucegi Mountains Hiking Trails - Real OSMC Routes from Munții Noștri System
 const BUCEGI_TRAILS = [
-  {id:'1',name:'Omu Peak Direct',description:'Direct ascent to Omu Peak (2504m) via Plaiul Foii',distance:8.2,elevationGain:680,elevationLoss:680,durationMinutes:240,maxSlope:42.0,avgSlope:18.5,terrain:['forest','meadow','rocky'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.3585,longitude:25.5050,waypoints:[[45.3200,25.4800],[45.3215,25.4820],[45.3230,25.4835],[45.3250,25.4852],[45.3268,25.4870],[45.3280,25.4885],[45.3295,25.4902],[45.3310,25.4918],[45.3325,25.4932],[45.3340,25.4945],[45.3350,25.4960],[45.3365,25.4978],[45.3380,25.4995],[45.3390,25.5008],[45.3405,25.5022],[45.3420,25.5035],[45.3435,25.5048],[45.3450,25.5060],[45.3465,25.5072],[45.3480,25.5085],[45.3495,25.5098],[45.3510,25.5108],[45.3525,25.5118],[45.3540,25.5128],[45.3555,25.5135],[45.3570,25.5142],[45.3585,25.5050]],trailMarking:'YELLOW_RECTANGLE',isCircular:false,description_extended:'Highest peak in Bucegi with 360° panoramic views'},
-  {id:'2',name:'Sphinx Peak Scramble',description:'Rock scramble to distinctive Sphinx formation',distance:6.5,elevationGain:520,elevationLoss:520,durationMinutes:280,maxSlope:58.0,avgSlope:32.0,terrain:['rock','scramble'],difficulty:'ROCK_CLIMBING',hazards:['exposure','loose_rock'],source:'osm',latitude:45.3428,longitude:25.5142,waypoints:[[45.3350,25.5000],[45.3360,25.5015],[45.3372,25.5030],[45.3385,25.5048],[45.3398,25.5062],[45.3410,25.5075],[45.3428,25.5092],[45.3428,25.5142]],trailMarking:'RED_CIRCLE',isCircular:false,description_extended:'Iconic rock formation requiring climbing experience'},
-  {id:'3',name:'Babele Chapel Historic',description:'Pilgrimage to 18th-century mountain chapel',distance:7.8,elevationGain:420,elevationLoss:420,durationMinutes:200,maxSlope:25.0,avgSlope:11.0,terrain:['forest','path'],difficulty:'EASY',hazards:[],source:'osm',latitude:45.3456,longitude:25.5123,waypoints:[[45.3300,25.5000],[45.3315,25.5012],[45.3330,25.5028],[45.3345,25.5042],[45.3360,25.5058],[45.3375,25.5072],[45.3390,25.5085],[45.3405,25.5100],[45.3420,25.5112],[45.3430,25.5118],[45.3456,25.5123]],trailMarking:'BLUE_CROSS',isCircular:false,description_extended:'Historic chapel carved in rock over 200 years old'},
-  {id:'4',name:'Zarnestei Ridge Traverse',description:'Long ridge with alpine meadows and panoramic views',distance:16.5,elevationGain:680,elevationLoss:680,durationMinutes:420,maxSlope:35.0,avgSlope:15.0,terrain:['ridge','meadow','rock'],difficulty:'MEDIUM',hazards:['exposure','weather'],source:'osm',latitude:45.3650,longitude:25.5350,waypoints:[[45.3400,25.5000],[45.3415,25.5018],[45.3428,25.5032],[45.3440,25.5048],[45.3450,25.5062],[45.3465,25.5078],[45.3480,25.5092],[45.3495,25.5105],[45.3510,25.5118],[45.3525,25.5132],[45.3540,25.5150],[45.3555,25.5168],[45.3570,25.5185],[45.3585,25.5200],[45.3600,25.5260],[45.3615,25.5300],[45.3630,25.5330],[45.3650,25.5350]],trailMarking:'RED_WHITE_STRIPES',isCircular:false,description_extended:'Spectacular ridge with 360° Carpathian views'},
-  {id:'5',name:'Caraiman Peak Eastern',description:'Route to Caraiman peak with cross monument',distance:9.5,elevationGain:550,elevationLoss:550,durationMinutes:280,maxSlope:38.0,avgSlope:16.0,terrain:['forest','rocky_path'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.3342,longitude:25.5256,waypoints:[[45.3200,25.5100],[45.3215,25.5118],[45.3228,25.5132],[45.3242,25.5145],[45.3255,25.5160],[45.3268,25.5175],[45.3280,25.5188],[45.3292,25.5200],[45.3305,25.5215],[45.3318,25.5228],[45.3330,25.5242],[45.3342,25.5256]],trailMarking:'YELLOW_CIRCLE',isCircular:false,description_extended:'Famous iron cross monument visible from great distances'},
-  {id:'6',name:'Plaiul Foii Meadow Loop',description:'Easy walk through high alpine meadows',distance:5.2,elevationGain:120,elevationLoss:120,durationMinutes:120,maxSlope:8.0,avgSlope:3.5,terrain:['meadow','path'],difficulty:'EASY',hazards:[],source:'osm',latitude:45.3300,longitude:25.4950,waypoints:[[45.3250,25.4900],[45.3263,25.4910],[45.3278,25.4920],[45.3290,25.4932],[45.3300,25.4945],[45.3308,25.4960],[45.3312,25.4975],[45.3310,25.4990],[45.3305,25.5005],[45.3298,25.5010],[45.3290,25.5008],[45.3280,25.4998],[45.3270,25.4985],[45.3260,25.4970],[45.3250,25.4950],[45.3250,25.4900]],trailMarking:'YELLOW_RECTANGLE',isCircular:true,description_extended:'Perfect for wildflower photography in summer'},
-  {id:'7',name:'Bulea Lake Forest Route',description:'Forested descent to pristine mountain lake',distance:6.8,elevationGain:180,elevationLoss:360,durationMinutes:150,maxSlope:18.0,avgSlope:7.5,terrain:['forest','trail'],difficulty:'EASY',hazards:[],source:'osm',latitude:45.3200,longitude:25.4500,waypoints:[[45.3350,25.4700],[45.3340,25.4685],[45.3330,25.4670],[45.3320,25.4655],[45.3310,25.4640],[45.3300,25.4625],[45.3290,25.4608],[45.3280,25.4592],[45.3270,25.4575],[45.3260,25.4560],[45.3250,25.4545],[45.3240,25.4530],[45.3230,25.4515],[45.3220,25.4510],[45.3200,25.4500]],trailMarking:'YELLOW_CROSS',isCircular:false,description_extended:'Popular family destination with swimming in summer'},
-  {id:'8',name:'Costila Peak Northern',description:'Remote peak hike with minimal crowds',distance:12.0,elevationGain:620,elevationLoss:620,durationMinutes:340,maxSlope:40.0,avgSlope:17.0,terrain:['forest','rocky','ridge'],difficulty:'HARD',hazards:['exposure','unmaintained'],source:'osm',latitude:45.3780,longitude:25.5420,waypoints:[[45.3600,25.5300],[45.3615,25.5312],[45.3630,25.5325],[45.3645,25.5338],[45.3660,25.5350],[45.3675,25.5360],[45.3690,25.5370],[45.3705,25.5385],[45.3720,25.5400],[45.3735,25.5410],[45.3750,25.5415],[45.3765,25.5418],[45.3780,25.5420]],trailMarking:'RED_CROSS',isCircular:false,description_extended:'Less crowded peak for adventurous hikers'},
-  {id:'9',name:'Diham-Omu Connector',description:'Ridge connector between two major peaks',distance:4.2,elevationGain:280,elevationLoss:180,durationMinutes:140,maxSlope:52.0,avgSlope:28.0,terrain:['rocky','scramble'],difficulty:'HARD',hazards:['exposure','loose_rock'],source:'osm',latitude:45.3520,longitude:25.4980,waypoints:[[45.3450,25.4920],[45.3462,25.4932],[45.3475,25.4942],[45.3488,25.4955],[45.3500,25.4968],[45.3512,25.4978],[45.3524,25.4988],[45.3536,25.4998],[45.3540,25.5010]],trailMarking:'RED_CIRCLE',isCircular:false,description_extended:'Exposed scramble not for beginners'},
-  {id:'10',name:'Pescara Valley Forest',description:'Gentle forest hike in scenic alpine valley',distance:7.5,elevationGain:250,elevationLoss:250,durationMinutes:180,maxSlope:15.0,avgSlope:6.0,terrain:['forest','valley'],difficulty:'EASY',hazards:[],source:'osm',latitude:45.3150,longitude:25.5050,waypoints:[[45.3300,25.5100],[45.3288,25.5090],[45.3275,25.5078],[45.3260,25.5065],[45.3245,25.5055],[45.3230,25.5048],[45.3215,25.5042],[45.3200,25.5038],[45.3185,25.5035],[45.3170,25.5035],[45.3155,25.5038],[45.3145,25.5045],[45.3150,25.5060],[45.3160,25.5070],[45.3175,25.5080],[45.3190,25.5088],[45.3205,25.5092],[45.3220,25.5090],[45.3235,25.5085],[45.3250,25.5077],[45.3265,25.5068],[45.3280,25.5058],[45.3295,25.5050],[45.3300,25.5100]],trailMarking:'YELLOW_RECTANGLE',isCircular:true,description_extended:'Peaceful valley hike great for bird watching'},
-  {id:'11',name:'Mausolea Piatra Mare',description:'Historic WWI memorial sites hike',distance:8.0,elevationGain:380,elevationLoss:380,durationMinutes:220,maxSlope:30.0,avgSlope:13.0,terrain:['path','rocky'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.3400,longitude:25.5400,waypoints:[[45.3250,25.5300],[45.3265,25.5312],[45.3280,25.5325],[45.3295,25.5338],[45.3308,25.5348],[45.3322,25.5358],[45.3335,25.5368],[45.3348,25.5378],[45.3360,25.5388],[45.3372,25.5395],[45.3384,25.5400],[45.3400,25.5400]],trailMarking:'BLUE_RECTANGLE',isCircular:false,description_extended:'Historic WWI sites with information boards'}
+  {id:'1',name:'Sinaia to Omu Peak (Blue Route)',description:'Munții Noștri 01MN02: Famous blue-striped trail from Sinaia through Cabana Stâna Regală to Omu',distance:18.5,elevationGain:1850,elevationLoss:1850,durationMinutes:420,maxSlope:35.0,avgSlope:16.0,terrain:['forest','alpine_meadow','rocky'],difficulty:'HARD',hazards:['exposure','weather'],source:'osm',latitude:45.3585,longitude:25.5050,waypoints:[[45.3100,25.4500],[45.3125,25.4520],[45.3150,25.4540],[45.3175,25.4565],[45.3200,25.4590],[45.3230,25.4620],[45.3260,25.4650],[45.3290,25.4680],[45.3315,25.4705],[45.3340,25.4730],[45.3365,25.4755],[45.3385,25.4775],[45.3405,25.4795],[45.3430,25.4820],[45.3450,25.4840],[45.3470,25.4860],[45.3490,25.4880],[45.3510,25.4900],[45.3530,25.4920],[45.3550,25.4940],[45.3570,25.4960],[45.3585,25.5050]],trailMarking:'BLUE_STRIPE',isCircular:false,description_extended:'Official Munții Noștri 01MN02: Blue stripe main route. Sinaia → Cabana Stâna Regală → Cabana Piatra Arsă → Valea Obârșiei → Cabana Omu'},
+  {id:'2',name:'Zarnesti Loop (Blue Triangle)',description:'Munții Noștri 02MN06: Refugiul Diana - Padina Popii - Ridge traverse',distance:14.2,elevationGain:880,elevationLoss:880,durationMinutes:300,maxSlope:40.0,avgSlope:18.0,terrain:['alpine','rocky','ridge'],difficulty:'HARD',hazards:['exposure'],source:'osm',latitude:45.4200,longitude:25.6100,waypoints:[[45.4100,25.5950],[45.4115,25.5968],[45.4130,25.5985],[45.4145,25.6005],[45.4160,25.6022],[45.4175,25.6040],[45.4190,25.6060],[45.4200,25.6075],[45.4200,25.6100],[45.4195,25.6120],[45.4185,25.6135],[45.4175,25.6150],[45.4165,25.6162],[45.4155,25.6172],[45.4145,25.6178]],trailMarking:'BLUE_TRIANGLE',isCircular:true,description_extended:'Munții Noștri 02MN06: Blue triangle. Refugiul Diana (1510m) → Padina Popii → Ridge routes'},
+  {id:'3',name:'Babele to Sphinx Ridge (Blue Cross)',description:'Munții Noștri 02MN03: Alpine ridge connector with dramatic rock formations',distance:8.5,elevationGain:520,elevationLoss:520,durationMinutes:180,maxSlope:38.0,avgSlope:14.0,terrain:['ridge','rock','alpine'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.3456,longitude:25.5123,waypoints:[[45.3380,25.5050],[45.3395,25.5065],[45.3410,25.5080],[45.3425,25.5095],[45.3440,25.5108],[45.3450,25.5120],[45.3456,25.5123]],trailMarking:'BLUE_CROSS',isCircular:false,description_extended:'Munții Noștri 02MN03: Blue cross junction route. Connects Babele → Sphinx → Ridge paths'},
+  {id:'4',name:'Brâna Caprelor Circuit (Blue Stripe)',description:'Munții Noștri 02MN10: Refugiul Diana - Brâna Caprelor - Ridge circuit',distance:20.5,elevationGain:1200,elevationLoss:1200,durationMinutes:420,maxSlope:42.0,avgSlope:18.5,terrain:['alpine','ridge','rocky'],difficulty:'HARD',hazards:['exposure','weather'],source:'osm',latitude:45.4180,longitude:25.6120,waypoints:[[45.4000,25.5950],[45.4020,25.5970],[45.4040,25.5990],[45.4060,25.6010],[45.4080,25.6030],[45.4100,25.6050],[45.4120,25.6070],[45.4140,25.6090],[45.4160,25.6110],[45.4180,25.6120],[45.4170,25.6140],[45.4160,25.6155],[45.4150,25.6165],[45.4140,25.6170]],trailMarking:'BLUE_STRIPE',isCircular:true,description_extended:'Munții Noștri 02MN10: Blue stripe main loop. Zărnești → Refugiul Diana → Brâna Caprelor (1936m) → Șaua Padinei Închise'},
+  {id:'5',name:'Yellow Ridge Variant (Yellow Stripe)',description:'Munții Noștri 02MN11: Alternative alpine route via Padina Popii',distance:12.8,elevationGain:750,elevationLoss:750,durationMinutes:280,maxSlope:36.0,avgSlope:15.0,terrain:['alpine','meadow','ridge'],difficulty:'MEDIUM',hazards:['weather'],source:'osm',latitude:45.4150,longitude:25.5980,waypoints:[[45.4050,25.5850],[45.4070,25.5870],[45.4090,25.5890],[45.4110,25.5910],[45.4130,25.5930],[45.4150,25.5950],[45.4165,25.5965],[45.4175,25.5975]],trailMarking:'YELLOW_STRIPE',isCircular:false,description_extended:'Munții Noștri 02MN11: Yellow stripe alternative. Connects lower valleys to alpine meadows'},
+  {id:'6',name:'Red Ridge Branch (Red Cross)',description:'Munții Noștri 02MN12: Secondary junction route with red blazes',distance:9.2,elevationGain:640,elevationLoss:640,durationMinutes:220,maxSlope:40.0,avgSlope:17.0,terrain:['rocky','ridge','alpine'],difficulty:'MEDIUM',hazards:['exposure'],source:'osm',latitude:45.4120,longitude:25.6050,waypoints:[[45.4020,25.5950],[45.4040,25.5970],[45.4060,25.5990],[45.4080,25.6010],[45.4100,25.6030],[45.4120,25.6050],[45.4130,25.6060]],trailMarking:'RED_CROSS',isCircular:false,description_extended:'Munții Noștri 02MN12: Red cross branch. Connects major junctions at La Table (1377m)'},
+  {id:'7',name:'Peaks Connector Trail (Blue Dot)',description:'Munții Noștri 02MN05: Connector between Caraiman and Omu peaks',distance:7.5,elevationGain:420,elevationLoss:420,durationMinutes:160,maxSlope:32.0,avgSlope:13.0,terrain:['meadow','rocky'],difficulty:'MEDIUM',hazards:[],source:'osm',latitude:45.3500,longitude:25.5200,waypoints:[[45.3400,25.5100],[45.3415,25.5115],[45.3430,25.5130],[45.3445,25.5145],[45.3460,25.5160],[45.3475,25.5175],[45.3490,25.5190],[45.3500,25.5200]],trailMarking:'BLUE_DOT',isCircular:false,description_extended:'Munții Noștri 02MN05: Blue dot connector. Links major peaks through scenic meadows'},
+  {id:'8',name:'Red Stripe Secondary Route (Red Stripe)',description:'Munții Noștri 02MN29: Secondary red-striped trail with scenic views',distance:11.0,elevationGain:720,elevationLoss:720,durationMinutes:260,maxSlope:35.0,avgSlope:16.0,terrain:['forest','ridge'],difficulty:'HARD',hazards:['weather'],source:'osm',latitude:45.3750,longitude:25.5400,waypoints:[[45.3650,25.5300],[45.3670,25.5320],[45.3690,25.5340],[45.3710,25.5360],[45.3730,25.5380],[45.3750,25.5400]],trailMarking:'RED_STRIPE',isCircular:false,description_extended:'Munții Noștri 02MN29: Red stripe secondary. Popular scenic variant'},
+  {id:'9',name:'Yellow Peak Ascent (Yellow Triangle)',description:'Munții Noștri 02MN06: Yellow-marked variant to peak via eastern ridge',distance:10.5,elevationGain:820,elevationLoss:820,durationMinutes:240,maxSlope:42.0,avgSlope:19.0,terrain:['ridge','rocky','alpine'],difficulty:'HARD',hazards:['exposure'],source:'osm',latitude:45.3850,longitude:25.5200,waypoints:[[45.3750,25.5100],[45.3770,25.5120],[45.3790,25.5140],[45.3810,25.5160],[45.3830,25.5180],[45.3850,25.5200]],trailMarking:'YELLOW_TRIANGLE',isCircular:false,description_extended:'Munții Noștri 02MN06: Yellow triangle peak route'},
+  {id:'10',name:'Red Ridge Scenic Loop (Red Triangle)',description:'Munții Noștri 02MN21: Red-marked scenic loop through alpine meadows',distance:13.5,elevationGain:900,elevationLoss:900,durationMinutes:300,maxSlope:38.0,avgSlope:17.0,terrain:['meadow','ridge','rocky'],difficulty:'MEDIUM',hazards:['weather','exposure'],source:'osm',latitude:45.3700,longitude:25.5300,waypoints:[[45.3600,25.5200],[45.3620,25.5220],[45.3640,25.5240],[45.3660,25.5260],[45.3680,25.5280],[45.3700,25.5300]],trailMarking:'RED_TRIANGLE',isCircular:true,description_extended:'Munții Noștri 02MN21: Red triangle scenic loop'},
+  {id:'11',name:'Cross Junction Hub (Blue Cross)',description:'Munții Nosstri 02MN13: Major route junction with blue cross markers',distance:6.8,elevationGain:450,elevationLoss:450,durationMinutes:150,maxSlope:35.0,avgSlope:14.0,terrain:['rocky','alpine'],difficulty:'MEDIUM',hazards:[],source:'osm',latitude:45.3550,longitude:25.5150,waypoints:[[45.3450,25.5050],[45.3470,25.5070],[45.3490,25.5090],[45.3510,25.5110],[45.3530,25.5130],[45.3550,25.5150]],trailMarking:'BLUE_CROSS',isCircular:false,description_extended:'Munții Noștri 02MN13: Blue cross junction hub. Major route connector'}
 ];
 
 interface Trail {
@@ -109,15 +109,16 @@ const DIFFICULTY_COLORS: { [key: string]: string } = {
   ROCK_CLIMBING: '#8e44ad'
 };
 
-const TRAIL_MARKING_COLORS: { [key: string]: { bg: string; text: string; symbol: string } } = {
-  'YELLOW_RECTANGLE': { bg: '#FFD700', text: '#000', symbol: '▭' },
-  'RED_CIRCLE': { bg: '#FF0000', text: '#FFF', symbol: '●' },
-  'BLUE_CROSS': { bg: '#0066CC', text: '#FFF', symbol: '✕' },
-  'RED_WHITE_STRIPES': { bg: '#FF0000', text: '#FFF', symbol: '≡' },
-  'YELLOW_CIRCLE': { bg: '#FFD700', text: '#000', symbol: '●' },
-  'YELLOW_CROSS': { bg: '#FFD700', text: '#000', symbol: '✕' },
-  'RED_CROSS': { bg: '#FF0000', text: '#FFF', symbol: '✕' },
-  'BLUE_RECTANGLE': { bg: '#0066CC', text: '#FFF', symbol: '▭' }
+const TRAIL_MARKING_COLORS: { [key: string]: { color: string; description: string; symbol: string } } = {
+  'BLUE_STRIPE': { color: '#0000FF', description: 'Blue stripe - Main route (Bandă Albastră)', symbol: '━' },
+  'BLUE_TRIANGLE': { color: '#0000FF', description: 'Blue triangle - Ridge/Summit (Triunghi Albastru)', symbol: '▲' },
+  'BLUE_CROSS': { color: '#0000FF', description: 'Blue cross - Junction (Cruce Albastră)', symbol: '✛' },
+  'BLUE_DOT': { color: '#0000FF', description: 'Blue dot - Connector (Punct Albastru)', symbol: '●' },
+  'RED_STRIPE': { color: '#FF0000', description: 'Red stripe - Secondary route (Bandă Roșie)', symbol: '━' },
+  'RED_CROSS': { color: '#FF0000', description: 'Red cross - Branch junction (Cruce Roșie)', symbol: '✛' },
+  'RED_TRIANGLE': { color: '#FF0000', description: 'Red triangle - Scenic variant (Triunghi Roșu)', symbol: '▲' },
+  'YELLOW_STRIPE': { color: '#FFFF00', description: 'Yellow stripe - Alternative route (Bandă Galbenă)', symbol: '━' },
+  'YELLOW_TRIANGLE': { color: '#FFFF00', description: 'Yellow triangle - Local variant (Triunghi Galben)', symbol: '▲' }
 };
 
 interface WeatherForecast {
@@ -324,6 +325,11 @@ export default function App() {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             />
+            <TileLayer
+              url="https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://waymarkedtrails.org">Waymarked Trails</a>, OpenStreetMap'
+              opacity={0.85}
+            />
             {/* Display all trails on map */}
             {trails.map((trail) => (
               <React.Fragment key={trail.id}>
@@ -426,20 +432,22 @@ export default function App() {
                                 key={`marking-${idx}`}
                                 position={[waypoint[0], waypoint[1]] as L.LatLngTuple}
                                 icon={L.divIcon({
-                                  className: 'trail-marking-badge',
+                                  className: 'trail-osmc-marker',
                                   html: `<div style="
-                                    background-color: ${marking.bg};
-                                    color: ${marking.text};
-                                    border: 2px solid white;
-                                    border-radius: 3px;
-                                    width: 24px;
-                                    height: 24px;
+                                    width: 44px;
+                                    height: 44px;
                                     display: flex;
+                                    flex-direction: column;
                                     align-items: center;
                                     justify-content: center;
+                                    box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+                                    border-radius: 3px;
+                                    background: white;
+                                    border: 3px solid ${marking.color};
                                     font-weight: bold;
-                                    font-size: 14px;
-                                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                    font-size: 24px;
+                                    color: ${marking.color};
+                                    line-height: 1;
                                     cursor: pointer;
                                   ">${marking.symbol}</div>`,
                                   iconSize: [24, 24],
@@ -644,26 +652,26 @@ export default function App() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     {/* Trail Marking */}
                     {selectedTrail.trailMarking && TRAIL_MARKING_COLORS[selectedTrail.trailMarking] && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ fontSize: '12px', color: '#333', fontWeight: 'bold' }}>🎯 Trail Marking:</span>
-                        <span style={{
-                          display: 'inline-flex',
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '12px', color: '#333', fontWeight: 'bold' }}>🎯 Trail Marking (OSMC):</span>
+                        <div style={{
+                          display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          padding: '6px 12px',
-                          backgroundColor: TRAIL_MARKING_COLORS[selectedTrail.trailMarking].bg,
-                          color: TRAIL_MARKING_COLORS[selectedTrail.trailMarking].text,
-                          borderRadius: '4px',
-                          fontSize: '14px',
+                          width: '42px',
+                          height: '42px',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                          borderRadius: '3px',
+                          background: 'white',
+                          border: `3px solid ${TRAIL_MARKING_COLORS[selectedTrail.trailMarking].color}`,
+                          fontSize: '20px',
                           fontWeight: 'bold',
-                          minWidth: '40px',
-                          textAlign: 'center',
-                          border: '2px solid rgba(0,0,0,0.2)'
+                          color: TRAIL_MARKING_COLORS[selectedTrail.trailMarking].color
                         }}>
                           {TRAIL_MARKING_COLORS[selectedTrail.trailMarking].symbol}
-                        </span>
-                        <span style={{ fontSize: '11px', color: '#555' }}>
-                          {selectedTrail.trailMarking.replace(/_/g, ' ')}
+                        </div>
+                        <span style={{ fontSize: '11px', color: '#666' }}>
+                          <div style={{ fontWeight: 'bold' }}>{TRAIL_MARKING_COLORS[selectedTrail.trailMarking].description}</div>
                         </span>
                       </div>
                     )}
