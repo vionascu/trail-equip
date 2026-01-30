@@ -32,8 +32,11 @@ public class Trail {
     private String ref;  // Reference: "01MN02", "02MN06"
 
     // === TRAIL GEOMETRY ===
-    @Column(columnDefinition = "Geometry(LineString,4326)")
-    private LineString geometry;  // PostgreSQL PostGIS LineString
+    // NOTE: Disabled for local development (requires PostGIS)
+    // Enable when using PostgreSQL with PostGIS extension
+    // @Column(columnDefinition = "Geometry(LineString,4326)")
+    @Transient
+    private LineString geometry;  // PostgreSQL PostGIS LineString (local dev: transient)
 
     // === TRAIL STATISTICS ===
     @Column(nullable = false)
