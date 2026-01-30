@@ -9,7 +9,7 @@ public class DifficultyClassifier {
 
     public Difficulty classify(Trail trail) {
         if (hasRockClimbingTerrain(trail)) {
-            return Difficulty.ROCK_CLIMBING;
+            return Difficulty.SCRAMBLING;
         }
         if (isHard(trail)) {
             return Difficulty.HARD;

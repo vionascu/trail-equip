@@ -171,4 +171,9 @@ public class Trail {
     public void setHazards(List<String> hazards) { this.hazards = hazards; }
     public void setSource(String source) { this.source = source; }
     public void setMaxElevation(Integer maxElevation) { this.maxElevation = maxElevation; }
+    public void setName(String name) { this.name = name; }
+    public void setRef(String ref) { this.ref = ref; }
+    public void setDistance(Double distance) { this.distance = distance; }
+    public void setMaxSlope(Double maxSlope) { this.maxSlope = maxSlope; }
+    public void setAvgSlope(Double avgSlope) { this.avgSlope = avgSlope; }
 }
