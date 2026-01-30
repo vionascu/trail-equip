@@ -35,7 +35,7 @@ public class WeatherController {
     @GetMapping("/providers")
     @Operation(summary = "List weather providers")
     public ResponseEntity<Map<String, Object>> listProviders() {
-        return ResponseEntity.ok(Map.of("providers",
-                new Object[] {Map.of("id", "open-meteo", "name", "Open-Meteo", "status", "active")}));
+        return ResponseEntity.ok(Map.of(
+                "providers", new Object[] {Map.of("id", "open-meteo", "name", "Open-Meteo", "status", "active")}));
     }
 }
