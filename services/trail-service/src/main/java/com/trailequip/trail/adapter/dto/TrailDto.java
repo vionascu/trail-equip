@@ -1,15 +1,14 @@
 package com.trailequip.trail.adapter.dto;
 
-import com.trailequip.trail.domain.model.Difficulty;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.trailequip.trail.domain.model.Difficulty;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Data Transfer Object for Trail API responses.
@@ -70,12 +69,14 @@ public class TrailDto {
                 .source(trail.getSource())
                 .createdAt(trail.getCreatedAt())
                 .updatedAt(trail.getUpdatedAt())
-                .marking(trail.getMarking() != null ? TrailMarkingDto.fromDomain(trail.getMarking()) : null)
-                .waypoints(trail.getWaypoints() != null ?
-                    trail.getWaypoints().stream()
-                        .map(WaypointDto::fromDomain)
-                        .toList()
-                    : null)
+                .marking(
+                        trail.getMarking() != null ? TrailMarkingDto.fromDomain(trail.getMarking()) : null)
+                .waypoints(
+                        trail.getWaypoints() != null
+                                ? trail.getWaypoints().stream()
+                                        .map(WaypointDto::fromDomain)
+                                        .toList()
+                                : null)
                 .build();
     }
 }
