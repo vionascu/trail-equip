@@ -11,9 +11,18 @@ function MapInvalidator({ selectedTrail }: { selectedTrail: any }) {
 
   useEffect(() => {
     // Invalidate map size and fit bounds after state changes
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 100);
+    const timer = setTimeout(() => {
+      try {
+        if (map && (map as any)._leaflet_pos !== undefined) {
+          map.invalidateSize();
+        }
+      } catch (error) {
+        // Silently handle if map is not ready yet
+        console.debug('Map not ready for invalidation');
+      }
+    }, 150);
+
+    return () => clearTimeout(timer);
   }, [map, selectedTrail]);
 
   return null;
