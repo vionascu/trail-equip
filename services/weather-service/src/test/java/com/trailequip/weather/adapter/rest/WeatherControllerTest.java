@@ -9,7 +9,6 @@ import com.trailequip.weather.application.service.WeatherApplicationService;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
