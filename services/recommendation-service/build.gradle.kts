@@ -6,6 +6,8 @@ plugins {
 
 dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 springBoot {
