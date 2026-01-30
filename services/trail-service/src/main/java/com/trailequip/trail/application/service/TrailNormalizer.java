@@ -3,9 +3,7 @@ package com.trailequip.trail.application.service;
 import com.trailequip.trail.domain.model.*;
 import com.trailequip.trail.infrastructure.overpass.OverpassRelation;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
@@ -19,13 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class TrailNormalizer {
 
-    private static final GeometryFactory geometryFactory = new GeometryFactory(
-        new PrecisionModel(PrecisionModel.FIXED), 4326
-    );
+    private static final GeometryFactory geometryFactory =
+            new GeometryFactory(new PrecisionModel(PrecisionModel.FIXED), 4326);
 
-    private static final Pattern OSMC_PATTERN = Pattern.compile(
-        "^(\\w+):(\\w+)(?:_(\\w+))?(?:_(\\w+))?$"
-    );
+    private static final Pattern OSMC_PATTERN = Pattern.compile("^(\\w+):(\\w+)(?:_(\\w+))?(?:_(\\w+))?$");
 
     /**
      * Normalize Overpass relation to Trail domain object.
@@ -36,13 +31,12 @@ public class TrailNormalizer {
     public Trail normalizeToDomain(OverpassRelation relation) {
         // Create base trail
         Trail trail = new Trail(
-            relation.getId(),
-            normalizeTrailName(relation.getName()),
-            relation.getRef(),
-            relation.calculateDistance(),
-            inferDifficulty(relation),
-            parseTrailMarking(relation.getOsmcSymbol())
-        );
+                relation.getId(),
+                normalizeTrailName(relation.getName()),
+                relation.getRef(),
+                relation.calculateDistance(),
+                inferDifficulty(relation),
+                parseTrailMarking(relation.getOsmcSymbol()));
 
         // Set calculated statistics
         trail.setDescription(relation.getDescription());
@@ -51,10 +45,7 @@ public class TrailNormalizer {
         trail.setMaxElevation(relation.getMaxElevation());
 
         // Estimate duration (average 3 km/h with 300m elevation = 30 min extra per 300m)
-        int durationMinutes = estimateDuration(
-            relation.calculateDistance(),
-            relation.calculateElevationGain()
-        );
+        int durationMinutes = estimateDuration(relation.calculateDistance(), relation.calculateElevationGain());
         trail.setDurationMinutes(durationMinutes);
 
         trail.setMaxSlope(relation.calculateMaxSlope());
@@ -277,8 +268,8 @@ public class TrailNormalizer {
 
         // Ensure coordinates have elevation data
         Coordinate[] coords = coordinates.stream()
-            .map(c -> new Coordinate(c.x, c.y, Double.isNaN(c.z) ? 0 : c.z))
-            .toArray(Coordinate[]::new);
+                .map(c -> new Coordinate(c.x, c.y, Double.isNaN(c.z) ? 0 : c.z))
+                .toArray(Coordinate[]::new);
 
         return geometryFactory.createLineString(coords);
     }
@@ -298,9 +289,11 @@ public class TrailNormalizer {
         // Add start point
         Coordinate startCoord = coordinates.get(0);
         Waypoint startPoint = new Waypoint(
-            startCoord.getY(), startCoord.getX(), (int) startCoord.getZ(),
-            "Start: " + relation.getName(), Waypoint.WaypointType.START
-        );
+                startCoord.getY(),
+                startCoord.getX(),
+                (int) startCoord.getZ(),
+                "Start: " + relation.getName(),
+                Waypoint.WaypointType.START);
         startPoint.setTrail(trail);
         startPoint.setSequenceOrder(0);
         waypoints.add(startPoint);
@@ -312,9 +305,11 @@ public class TrailNormalizer {
         for (int i = step; i < coordinates.size() - 1; i += step) {
             Coordinate coord = coordinates.get(i);
             Waypoint waypoint = new Waypoint(
-                coord.getY(), coord.getX(), (int) coord.getZ(),
-                "Waypoint " + sequenceOrder, Waypoint.WaypointType.JUNCTION
-            );
+                    coord.getY(),
+                    coord.getX(),
+                    (int) coord.getZ(),
+                    "Waypoint " + sequenceOrder,
+                    Waypoint.WaypointType.JUNCTION);
             waypoint.setTrail(trail);
             waypoint.setSequenceOrder(sequenceOrder);
             waypoints.add(waypoint);
@@ -324,9 +319,11 @@ public class TrailNormalizer {
         // Add end point
         Coordinate endCoord = coordinates.get(coordinates.size() - 1);
         Waypoint endPoint = new Waypoint(
-            endCoord.getY(), endCoord.getX(), (int) endCoord.getZ(),
-            "End: " + relation.getName(), Waypoint.WaypointType.END
-        );
+                endCoord.getY(),
+                endCoord.getX(),
+                (int) endCoord.getZ(),
+                "End: " + relation.getName(),
+                Waypoint.WaypointType.END);
         endPoint.setTrail(trail);
         endPoint.setSequenceOrder(sequenceOrder);
         waypoints.add(endPoint);

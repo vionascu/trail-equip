@@ -69,8 +69,7 @@ public class TrailDto {
                 .source(trail.getSource())
                 .createdAt(trail.getCreatedAt())
                 .updatedAt(trail.getUpdatedAt())
-                .marking(
-                        trail.getMarking() != null ? TrailMarkingDto.fromDomain(trail.getMarking()) : null)
+                .marking(trail.getMarking() != null ? TrailMarkingDto.fromDomain(trail.getMarking()) : null)
                 .waypoints(
                         trail.getWaypoints() != null
                                 ? trail.getWaypoints().stream()

@@ -6,53 +6,52 @@ package com.trailequip.trail.domain.model;
  */
 public enum Difficulty {
     EASY(
-        "Easy - Minimal elevation, well-maintained paths",
-        10.0,      // maxSlopeThreshold (%)
-        500,       // maxElevationGainThreshold (m)
-        "🟢",      // emoji
-        "Suitable for families and beginners. Paved or well-maintained forest paths."
-    ),
+            "Easy - Minimal elevation, well-maintained paths",
+            10.0, // maxSlopeThreshold (%)
+            500, // maxElevationGainThreshold (m)
+            "🟢", // emoji
+            "Suitable for families and beginners. Paved or well-maintained forest paths."),
 
     MEDIUM(
-        "Moderate - Some elevation, occasional rocky sections",
-        20.0,
-        1500,
-        "🟡",
-        "Requires basic fitness. Mix of paths and rocky terrain with some exposure."
-    ),
+            "Moderate - Some elevation, occasional rocky sections",
+            20.0,
+            1500,
+            "🟡",
+            "Requires basic fitness. Mix of paths and rocky terrain with some exposure."),
 
     HARD(
-        "Hard - Significant elevation, exposed terrain",
-        30.0,
-        2500,
-        "🔴",
-        "Experienced hikers only. Steep terrain, exposed ridges, scrambling sections."
-    ),
+            "Hard - Significant elevation, exposed terrain",
+            30.0,
+            2500,
+            "🔴",
+            "Experienced hikers only. Steep terrain, exposed ridges, scrambling sections."),
 
     ALPINE(
-        "Alpine - High altitude, thin air, exposed ridges",
-        40.0,
-        3000,
-        "🟣",
-        "Alpine/mountaineering experience required. High altitude, weather exposure, thin air."
-    ),
+            "Alpine - High altitude, thin air, exposed ridges",
+            40.0,
+            3000,
+            "🟣",
+            "Alpine/mountaineering experience required. High altitude, weather exposure, thin air."),
 
     SCRAMBLING(
-        "Scrambling - Hands required, technical terrain",
-        50.0,
-        3500,
-        "🧗",
-        "Rock climbing skills required. Hands-on scrambling, exposed drops, technical moves."
-    );
+            "Scrambling - Hands required, technical terrain",
+            50.0,
+            3500,
+            "🧗",
+            "Rock climbing skills required. Hands-on scrambling, exposed drops, technical moves.");
 
     private final String description;
-    private final Double maxSlopeThreshold;      // Maximum slope percentage
-    private final Integer maxElevationGainThreshold;  // Maximum elevation gain in meters
+    private final Double maxSlopeThreshold; // Maximum slope percentage
+    private final Integer maxElevationGainThreshold; // Maximum elevation gain in meters
     private final String emoji;
     private final String fullDescription;
 
-    Difficulty(String description, Double maxSlopeThreshold, Integer maxElevationGainThreshold,
-               String emoji, String fullDescription) {
+    Difficulty(
+            String description,
+            Double maxSlopeThreshold,
+            Integer maxElevationGainThreshold,
+            String emoji,
+            String fullDescription) {
         this.description = description;
         this.maxSlopeThreshold = maxSlopeThreshold;
         this.maxElevationGainThreshold = maxElevationGainThreshold;
@@ -92,7 +91,7 @@ public enum Difficulty {
      */
     public static Difficulty inferFromMetrics(Integer elevationGain, Double maxSlope) {
         if (elevationGain == null || maxSlope == null) {
-            return MEDIUM;  // Default to medium if data missing
+            return MEDIUM; // Default to medium if data missing
         }
 
         // Prioritize slope over elevation for technical difficulty
@@ -132,7 +131,6 @@ public enum Difficulty {
             return false;
         }
 
-        return elevationGain <= this.maxElevationGainThreshold &&
-               maxSlope <= this.maxSlopeThreshold;
+        return elevationGain <= this.maxElevationGainThreshold && maxSlope <= this.maxSlopeThreshold;
     }
 }

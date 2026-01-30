@@ -1,5 +1,7 @@
 package com.trailequip.trail.application.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.trailequip.trail.domain.model.Difficulty;
@@ -12,10 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.PrecisionModel;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for TrailExportService.
@@ -154,9 +153,7 @@ class TrailExportServiceTest {
         trail.setName("Trail");
         trail.setDistance(10.0);
         trail.setDifficulty(Difficulty.EASY);
-        trail.setGeometry(geometryFactory.createLineString(new Coordinate[] {
-            new Coordinate(25.54, 45.35, 1000)
-        }));
+        trail.setGeometry(geometryFactory.createLineString(new Coordinate[] {new Coordinate(25.54, 45.35, 1000)}));
 
         String geoJson = exportService.exportAsGeoJSON(trail);
 
@@ -169,9 +166,7 @@ class TrailExportServiceTest {
         Trail trail = new Trail();
         trail.setId(UUID.randomUUID());
         trail.setName("Trail");
-        trail.setGeometry(geometryFactory.createLineString(new Coordinate[] {
-            new Coordinate(25.54, 45.35, 1000)
-        }));
+        trail.setGeometry(geometryFactory.createLineString(new Coordinate[] {new Coordinate(25.54, 45.35, 1000)}));
 
         String gpx = exportService.exportAsGPX(trail);
 

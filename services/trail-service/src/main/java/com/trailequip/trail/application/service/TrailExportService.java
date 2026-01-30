@@ -1,6 +1,5 @@
 package com.trailequip.trail.application.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -114,10 +113,10 @@ public class TrailExportService {
         if (geometry != null) {
             for (Coordinate coord : geometry.getCoordinates()) {
                 ArrayNode coordArray = objectMapper.createArrayNode();
-                coordArray.add(coord.getX());  // longitude
-                coordArray.add(coord.getY());  // latitude
+                coordArray.add(coord.getX()); // longitude
+                coordArray.add(coord.getY()); // latitude
                 if (!Double.isNaN(coord.getZ())) {
-                    coordArray.add(coord.getZ());  // elevation
+                    coordArray.add(coord.getZ()); // elevation
                 }
                 coordinates.add(coordArray);
             }
@@ -139,7 +138,8 @@ public class TrailExportService {
         gpx.append("<gpx version=\"1.1\" creator=\"TrailEquip\" ");
         gpx.append("xmlns=\"http://www.topografix.com/GPX/1/1\" ");
         gpx.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-        gpx.append("xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n");
+        gpx.append(
+                "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n");
 
         // Metadata
         gpx.append("<metadata>\n");
@@ -190,7 +190,11 @@ public class TrailExportService {
         LineString geometry = trail.getGeometry();
         if (geometry != null && !geometry.isEmpty()) {
             for (Coordinate coord : geometry.getCoordinates()) {
-                gpx.append("    <trkpt lat=\"").append(coord.getY()).append("\" lon=\"").append(coord.getX()).append("\">\n");
+                gpx.append("    <trkpt lat=\"")
+                        .append(coord.getY())
+                        .append("\" lon=\"")
+                        .append(coord.getX())
+                        .append("\">\n");
 
                 if (!Double.isNaN(coord.getZ())) {
                     gpx.append("      <ele>").append(coord.getZ()).append("</ele>\n");
@@ -206,7 +210,11 @@ public class TrailExportService {
         // Add waypoints
         if (trail.getWaypoints() != null && !trail.getWaypoints().isEmpty()) {
             for (Waypoint waypoint : trail.getWaypoints()) {
-                gpx.append("<wpt lat=\"").append(waypoint.getLatitude()).append("\" lon=\"").append(waypoint.getLongitude()).append("\">\n");
+                gpx.append("<wpt lat=\"")
+                        .append(waypoint.getLatitude())
+                        .append("\" lon=\"")
+                        .append(waypoint.getLongitude())
+                        .append("\">\n");
 
                 if (waypoint.getElevation() != null) {
                     gpx.append("  <ele>").append(waypoint.getElevation()).append("</ele>\n");
@@ -221,7 +229,9 @@ public class TrailExportService {
                 }
 
                 if (waypoint.getDescription() != null) {
-                    gpx.append("  <desc>").append(escapeXml(waypoint.getDescription())).append("</desc>\n");
+                    gpx.append("  <desc>")
+                            .append(escapeXml(waypoint.getDescription()))
+                            .append("</desc>\n");
                 }
 
                 gpx.append("</wpt>\n");
@@ -246,7 +256,8 @@ public class TrailExportService {
         gpx.append("<gpx version=\"1.1\" creator=\"TrailEquip\" ");
         gpx.append("xmlns=\"http://www.topografix.com/GPX/1/1\" ");
         gpx.append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
-        gpx.append("xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n");
+        gpx.append(
+                "xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\">\n");
 
         // Metadata
         gpx.append("<metadata>\n");
@@ -269,7 +280,11 @@ public class TrailExportService {
             LineString geometry = trail.getGeometry();
             if (geometry != null && !geometry.isEmpty()) {
                 for (Coordinate coord : geometry.getCoordinates()) {
-                    gpx.append("    <trkpt lat=\"").append(coord.getY()).append("\" lon=\"").append(coord.getX()).append("\">\n");
+                    gpx.append("    <trkpt lat=\"")
+                            .append(coord.getY())
+                            .append("\" lon=\"")
+                            .append(coord.getX())
+                            .append("\">\n");
 
                     if (!Double.isNaN(coord.getZ())) {
                         gpx.append("      <ele>").append(coord.getZ()).append("</ele>\n");
@@ -297,8 +312,7 @@ public class TrailExportService {
             return "";
         }
 
-        return text
-                .replace("&", "&amp;")
+        return text.replace("&", "&amp;")
                 .replace("<", "&lt;")
                 .replace(">", "&gt;")
                 .replace("\"", "&quot;")

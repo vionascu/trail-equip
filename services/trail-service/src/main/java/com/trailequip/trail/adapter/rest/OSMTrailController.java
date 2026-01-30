@@ -92,7 +92,8 @@ public class OSMTrailController {
             @RequestParam(defaultValue = "10") double radius) {
 
         log.info("Ingesting trails near ({}, {}) within {} km", latitude, longitude, radius);
-        OSMIngestionService.IngestionResult result = osmIngestionService.ingestTrailsNearby(latitude, longitude, radius);
+        OSMIngestionService.IngestionResult result =
+                osmIngestionService.ingestTrailsNearby(latitude, longitude, radius);
         return ResponseEntity.ok(result);
     }
 
@@ -157,8 +158,7 @@ public class OSMTrailController {
     @GetMapping("/all/geojson")
     @Operation(summary = "Export all trails as GeoJSON FeatureCollection")
     public ResponseEntity<String> exportAllTrailsAsGeoJSON(
-            @RequestParam(required = false) String difficulty,
-            @RequestParam(required = false) String source) {
+            @RequestParam(required = false) String difficulty, @RequestParam(required = false) String source) {
 
         try {
             List<Trail> trails;
@@ -238,12 +238,7 @@ public class OSMTrailController {
         long trailCount = trailRepository.count();
         long osmTrailCount = trailRepository.findBySource("openstreetmap").size();
 
-        HealthStatus status = new HealthStatus(
-            "OSM Integration",
-            "UP",
-            trailCount,
-            osmTrailCount
-        );
+        HealthStatus status = new HealthStatus("OSM Integration", "UP", trailCount, osmTrailCount);
 
         return ResponseEntity.ok(status);
     }

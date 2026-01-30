@@ -75,15 +75,20 @@ public class StartupValidator implements ApplicationRunner {
 
     /**
      * Validate all required environment variables are set.
+     * In development mode (when datasource URL is configured in properties), skips env var validation.
      */
     private void validateEnvironmentVariables() {
         log.info("Validating environment variables...");
 
-        String[] requiredVars = {
-            "DATABASE_URL",
-            "POSTGRES_DB",
-            "POSTGRES_USER"
-        };
+        // If datasource URL is already configured (from properties file), skip environment validation
+        // This is for development mode using application-dev.yml
+        if (datasourceUrl != null && !datasourceUrl.trim().isEmpty()) {
+            log.info("  ℹ Database configuration found in properties - skipping environment variable validation");
+            log.debug("  Using configured datasource: {}", datasourceUrl);
+            return;
+        }
+
+        String[] requiredVars = {"DATABASE_URL", "POSTGRES_DB", "POSTGRES_USER"};
 
         for (String var : requiredVars) {
             String value = System.getenv(var);
@@ -132,7 +137,7 @@ public class StartupValidator implements ApplicationRunner {
         log.info("Validating PostGIS extension...");
 
         try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
+                Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery("SELECT PostGIS_version();");
             if (rs.next()) {
@@ -153,12 +158,7 @@ public class StartupValidator implements ApplicationRunner {
     private void validateDatabaseSchema() {
         log.info("Validating database schema...");
 
-        String[] requiredTables = {
-            "trails",
-            "trail_markings",
-            "trail_waypoints",
-            "trail_segments"
-        };
+        String[] requiredTables = {"trails", "trail_markings", "trail_waypoints", "trail_segments"};
 
         try (Connection conn = dataSource.getConnection()) {
             for (String table : requiredTables) {

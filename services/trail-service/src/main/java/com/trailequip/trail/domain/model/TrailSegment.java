@@ -9,11 +9,13 @@ import org.locationtech.jts.geom.LineString;
  * Multiple segments make up the complete trail path.
  */
 @Entity
-@Table(name = "trail_segments", indexes = {
-    @Index(name = "idx_trail_id", columnList = "trail_id"),
-    @Index(name = "idx_osm_way_id", columnList = "osm_way_id"),
-    @Index(name = "idx_terrain_type", columnList = "terrain_type")
-})
+@Table(
+        name = "trail_segments",
+        indexes = {
+            @Index(name = "idx_trail_id", columnList = "trail_id"),
+            @Index(name = "idx_osm_way_id", columnList = "osm_way_id"),
+            @Index(name = "idx_terrain_type", columnList = "terrain_type")
+        })
 public class TrailSegment {
 
     @Id
@@ -25,25 +27,25 @@ public class TrailSegment {
     private Trail trail;
 
     @Column(nullable = false, name = "osm_way_id")
-    private Long osmWayId;  // OpenStreetMap way ID
+    private Long osmWayId; // OpenStreetMap way ID
 
     @Column(nullable = false)
-    private Integer sequenceOrder;  // Order in trail
+    private Integer sequenceOrder; // Order in trail
 
     @Column(columnDefinition = "Geometry(LineString,4326)")
-    private LineString geometry;  // Actual trail path
+    private LineString geometry; // Actual trail path
 
     @Column(nullable = false)
-    private Double length;  // in km
+    private Double length; // in km
 
     @Enumerated(EnumType.STRING)
     private TerrainType terrainType;
 
     @Column(nullable = false)
-    private Boolean accessible;  // Can this segment be hiked?
+    private Boolean accessible; // Can this segment be hiked?
 
     @Column(columnDefinition = "TEXT")
-    private String notes;  // "Steep scramble", "Water crossing", etc.
+    private String notes; // "Steep scramble", "Water crossing", etc.
 
     // ===== ENUM =====
 
@@ -72,8 +74,13 @@ public class TrailSegment {
 
     public TrailSegment() {}
 
-    public TrailSegment(Trail trail, Long osmWayId, Integer sequenceOrder,
-                       LineString geometry, Double length, TerrainType terrainType) {
+    public TrailSegment(
+            Trail trail,
+            Long osmWayId,
+            Integer sequenceOrder,
+            LineString geometry,
+            Double length,
+            TerrainType terrainType) {
         this.trail = trail;
         this.osmWayId = osmWayId;
         this.sequenceOrder = sequenceOrder;

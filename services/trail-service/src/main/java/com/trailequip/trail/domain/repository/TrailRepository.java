@@ -1,7 +1,7 @@
 package com.trailequip.trail.domain.repository;
 
-import com.trailequip.trail.domain.model.Trail;
 import com.trailequip.trail.domain.model.Difficulty;
+import com.trailequip.trail.domain.model.Trail;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

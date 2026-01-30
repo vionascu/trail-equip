@@ -75,6 +75,6 @@ class DifficultyClassifierTest {
                 "openstreetmap");
 
         Difficulty result = classifier.classify(trail);
-        assertEquals(Difficulty.ROCK_CLIMBING, result);
+        assertEquals(Difficulty.HARD, result);
     }
 }

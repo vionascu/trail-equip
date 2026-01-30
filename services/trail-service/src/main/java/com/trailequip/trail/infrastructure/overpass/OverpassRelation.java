@@ -11,8 +11,8 @@ public class OverpassRelation {
 
     private final Long id;
     private final String name;
-    private final String route;  // "hiking", "foot", "alpine_hiking"
-    private final String ref;    // Route reference like "01MN02"
+    private final String route; // "hiking", "foot", "alpine_hiking"
+    private final String ref; // Route reference like "01MN02"
     private final String network; // "lwn", "iwn", etc.
     private final String operator;
     private final String osmcSymbol; // OSMC trail marking
@@ -22,18 +22,17 @@ public class OverpassRelation {
     private final List<Coordinate> coordinates; // Combined geometry
 
     public OverpassRelation(
-        Long id,
-        String name,
-        String route,
-        String ref,
-        String network,
-        String operator,
-        String osmcSymbol,
-        String difficulty,
-        String description,
-        List<Long> memberWayIds,
-        List<Coordinate> coordinates
-    ) {
+            Long id,
+            String name,
+            String route,
+            String ref,
+            String network,
+            String operator,
+            String osmcSymbol,
+            String difficulty,
+            String description,
+            List<Long> memberWayIds,
+            List<Coordinate> coordinates) {
         this.id = id;
         this.name = name;
         this.route = route;
@@ -106,10 +105,7 @@ public class OverpassRelation {
 
         double totalDistance = 0.0;
         for (int i = 0; i < coordinates.size() - 1; i++) {
-            totalDistance += haversineDistance(
-                coordinates.get(i),
-                coordinates.get(i + 1)
-            );
+            totalDistance += haversineDistance(coordinates.get(i), coordinates.get(i + 1));
         }
         return totalDistance;
     }
@@ -170,10 +166,7 @@ public class OverpassRelation {
             return 0;
         }
 
-        return (int) coordinates.stream()
-            .mapToDouble(Coordinate::getZ)
-            .max()
-            .orElse(0);
+        return (int) coordinates.stream().mapToDouble(Coordinate::getZ).max().orElse(0);
     }
 
     /**
@@ -239,9 +232,8 @@ public class OverpassRelation {
         double deltaLat = Math.toRadians(c2.getY() - c1.getY());
         double deltaLon = Math.toRadians(c2.getX() - c1.getX());
 
-        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2) +
-                  Math.cos(lat1) * Math.cos(lat2) *
-                  Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
+        double a = Math.sin(deltaLat / 2) * Math.sin(deltaLat / 2)
+                + Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) * Math.sin(deltaLon / 2);
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -250,12 +242,11 @@ public class OverpassRelation {
 
     @Override
     public String toString() {
-        return "OverpassRelation{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", route='" + route + '\'' +
-            ", ref='" + ref + '\'' +
-            ", coordinates=" + (coordinates != null ? coordinates.size() : 0) + " points" +
-            '}';
+        return "OverpassRelation{" + "id="
+                + id + ", name='"
+                + name + '\'' + ", route='"
+                + route + '\'' + ", ref='"
+                + ref + '\'' + ", coordinates="
+                + (coordinates != null ? coordinates.size() : 0) + " points" + '}';
     }
 }

@@ -1,5 +1,7 @@
 package com.trailequip.trail.application.service;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import com.trailequip.trail.domain.model.Trail;
 import com.trailequip.trail.domain.model.Waypoint;
 import com.trailequip.trail.infrastructure.overpass.OverpassRelation;
@@ -8,8 +10,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for TrailNormalizer service.
@@ -32,18 +32,17 @@ class TrailNormalizerTest {
         coordinates.add(new Coordinate(25.544, 45.352, 1050));
 
         OverpassRelation relation = new OverpassRelation(
-            12345L,
-            "Test Trail",
-            "hiking",
-            "01MN",
-            "lwn",
-            "OpenStreetMap",
-            "blue:blue_stripe",
-            "moderate",
-            "A test trail",
-            new ArrayList<>(),
-            coordinates
-        );
+                12345L,
+                "Test Trail",
+                "hiking",
+                "01MN",
+                "lwn",
+                "OpenStreetMap",
+                "blue:blue_stripe",
+                "moderate",
+                "A test trail",
+                new ArrayList<>(),
+                coordinates);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -61,9 +60,17 @@ class TrailNormalizerTest {
         List<Coordinate> coordinates = createSimpleCoordinates();
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            "blue:blue_stripe", null, null, new ArrayList<>(), coordinates
-        );
+                123L,
+                "Trail",
+                "hiking",
+                null,
+                null,
+                null,
+                "blue:blue_stripe",
+                null,
+                null,
+                new ArrayList<>(),
+                coordinates);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -77,9 +84,7 @@ class TrailNormalizerTest {
         List<Coordinate> coordinates = createSimpleCoordinates();
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coordinates
-        );
+                123L, "Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coordinates);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -95,9 +100,7 @@ class TrailNormalizerTest {
         coords.add(new Coordinate(25.544, 45.352, 1050));
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L, "Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coords);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -116,9 +119,7 @@ class TrailNormalizerTest {
         }
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L, "Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coords);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -145,9 +146,7 @@ class TrailNormalizerTest {
         }
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Hard Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L, "Hard Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coords);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -162,9 +161,7 @@ class TrailNormalizerTest {
 
         // Test "difficult" mapping
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            null, "difficult", null, new ArrayList<>(), coordinates
-        );
+                123L, "Trail", "hiking", null, null, null, null, "difficult", null, new ArrayList<>(), coordinates);
 
         Trail trail = normalizer.normalizeToDomain(relation);
         assertEquals("HARD", trail.getDifficulty().name());
@@ -178,9 +175,7 @@ class TrailNormalizerTest {
         }
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Alpine Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L, "Alpine Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coords);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -198,9 +193,7 @@ class TrailNormalizerTest {
         }
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail in Bucegi", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L, "Trail in Bucegi", "hiking", null, null, null, null, null, null, new ArrayList<>(), coords);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -213,9 +206,7 @@ class TrailNormalizerTest {
         List<Coordinate> coordinates = createSimpleCoordinates();
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", "hiking", null, null, null,
-            null, null, null, new ArrayList<>(), coordinates
-        );
+                123L, "Trail", "hiking", null, null, null, null, null, null, new ArrayList<>(), coordinates);
 
         Trail trail = normalizer.normalizeToDomain(relation);
 
@@ -229,9 +220,7 @@ class TrailNormalizerTest {
         List<Coordinate> coordinates = createSimpleCoordinates();
 
         OverpassRelation relation = new OverpassRelation(
-            123L, "Trail", null, null, null, null,
-            null, null, null, new ArrayList<>(), coordinates
-        );
+                123L, "Trail", null, null, null, null, null, null, null, new ArrayList<>(), coordinates);
 
         assertDoesNotThrow(() -> normalizer.normalizeToDomain(relation));
         Trail trail = normalizer.normalizeToDomain(relation);

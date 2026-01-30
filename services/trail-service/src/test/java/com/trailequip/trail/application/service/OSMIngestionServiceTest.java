@@ -1,6 +1,9 @@
 package com.trailequip.trail.application.service;
 
-import com.trailequip.trail.domain.model.Difficulty;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
 import com.trailequip.trail.domain.model.Trail;
 import com.trailequip.trail.domain.repository.TrailRepository;
 import com.trailequip.trail.infrastructure.overpass.OverpassApiClient;
@@ -14,10 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.locationtech.jts.geom.Coordinate;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 /**
  * Unit tests for OSMIngestionService.
@@ -60,18 +59,15 @@ class OSMIngestionServiceTest {
     @Test
     void shouldIngestTrailsByBoundingBox() {
         List<OverpassRelation> mockRelations = createMockRelations(2);
-        when(overpassApiClient.queryHikingRoutesByBbox(45.2, 25.4, 45.5, 25.7))
-            .thenReturn(mockRelations);
+        when(overpassApiClient.queryHikingRoutesByBbox(45.2, 25.4, 45.5, 25.7)).thenReturn(mockRelations);
         when(trailRepository.save(any(Trail.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(trailRepository.findByOsmId(any())).thenReturn(Optional.empty());
 
-        OSMIngestionService.IngestionResult result =
-            ingestionService.ingestTrailsByBbox(45.2, 25.4, 45.5, 25.7);
+        OSMIngestionService.IngestionResult result = ingestionService.ingestTrailsByBbox(45.2, 25.4, 45.5, 25.7);
 
         assertTrue(result.isSuccess());
         assertEquals(2, result.getFetched());
-        verify(overpassApiClient, times(1))
-            .queryHikingRoutesByBbox(45.2, 25.4, 45.5, 25.7);
+        verify(overpassApiClient, times(1)).queryHikingRoutesByBbox(45.2, 25.4, 45.5, 25.7);
     }
 
     @Test
@@ -90,13 +86,11 @@ class OSMIngestionServiceTest {
     @Test
     void shouldIngestTrailsNearby() {
         List<OverpassRelation> mockRelations = createMockRelations(2);
-        when(overpassApiClient.queryTrailsNearby(45.35, 25.54, 10))
-            .thenReturn(mockRelations);
+        when(overpassApiClient.queryTrailsNearby(45.35, 25.54, 10)).thenReturn(mockRelations);
         when(trailRepository.save(any(Trail.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(trailRepository.findByOsmId(any())).thenReturn(Optional.empty());
 
-        OSMIngestionService.IngestionResult result =
-            ingestionService.ingestTrailsNearby(45.35, 25.54, 10);
+        OSMIngestionService.IngestionResult result = ingestionService.ingestTrailsNearby(45.35, 25.54, 10);
 
         assertTrue(result.isSuccess());
         assertEquals(2, result.getFetched());
@@ -123,10 +117,17 @@ class OSMIngestionServiceTest {
     void shouldUpdateExistingTrailsFromNewerVersion() {
         OverpassRelation mockRelation = createMockRelation(123L);
         mockRelation = new OverpassRelation(
-            123L, "Updated Trail Name", "hiking", "01MN", null, null,
-            "blue:blue_stripe", null, "Updated description",
-            new ArrayList<>(), mockRelation.getCoordinates()
-        );
+                123L,
+                "Updated Trail Name",
+                "hiking",
+                "01MN",
+                null,
+                null,
+                "blue:blue_stripe",
+                null,
+                "Updated description",
+                new ArrayList<>(),
+                mockRelation.getCoordinates());
 
         Trail existingTrail = new Trail();
         existingTrail.setOsmId(123L);
@@ -138,9 +139,7 @@ class OSMIngestionServiceTest {
 
         ingestionService.ingestTrailById(123L);
 
-        verify(trailRepository, times(1)).save(argThat(t ->
-            "Updated Trail Name".equals(t.getName())
-        ));
+        verify(trailRepository, times(1)).save(argThat(t -> "Updated Trail Name".equals(t.getName())));
     }
 
     @Test
@@ -149,9 +148,17 @@ class OSMIngestionServiceTest {
         coords.add(new Coordinate(25.54, 45.35, 1000));
 
         OverpassRelation invalidRelation = new OverpassRelation(
-            123L, null, "hiking", null, null, null,  // null name
-            null, null, null, new ArrayList<>(), coords
-        );
+                123L,
+                null,
+                "hiking",
+                null,
+                null,
+                null, // null name
+                null,
+                null,
+                null,
+                new ArrayList<>(),
+                coords);
 
         when(overpassApiClient.queryBucegiHikingRoutes()).thenReturn(List.of(invalidRelation));
 
@@ -166,7 +173,7 @@ class OSMIngestionServiceTest {
         existingTrail.setOsmId(100L);
 
         when(overpassApiClient.queryBucegiHikingRoutes())
-            .thenReturn(List.of(createMockRelation(100L), createMockRelation(101L)));
+                .thenReturn(List.of(createMockRelation(100L), createMockRelation(101L)));
         when(trailRepository.findByOsmId(100L)).thenReturn(Optional.of(existingTrail));
         when(trailRepository.findByOsmId(101L)).thenReturn(Optional.empty());
         when(trailRepository.save(any(Trail.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -179,8 +186,7 @@ class OSMIngestionServiceTest {
 
     @Test
     void shouldHandleAPIErrors() {
-        when(overpassApiClient.queryBucegiHikingRoutes())
-            .thenThrow(new RuntimeException("API Error"));
+        when(overpassApiClient.queryBucegiHikingRoutes()).thenThrow(new RuntimeException("API Error"));
 
         OSMIngestionService.IngestionResult result = ingestionService.ingestBucegiTrails();
 
@@ -197,12 +203,11 @@ class OSMIngestionServiceTest {
 
         OSMIngestionService.IngestionResult result = ingestionService.ingestBucegiTrails();
 
-        verify(trailRepository, times(1)).save(argThat(trail ->
-            trail.getName() != null &&
-            trail.getDistance() != null &&
-            trail.getDifficulty() != null &&
-            trail.getGeometry() != null
-        ));
+        verify(trailRepository, times(1))
+                .save(argThat(trail -> trail.getName() != null
+                        && trail.getDistance() != null
+                        && trail.getDifficulty() != null
+                        && trail.getGeometry() != null));
     }
 
     // Helper methods
@@ -222,17 +227,16 @@ class OSMIngestionServiceTest {
         coords.add(new Coordinate(25.542, 45.352, 1200));
 
         return new OverpassRelation(
-            id,
-            "Test Trail " + id,
-            "hiking",
-            "01MN",
-            "lwn",
-            "OpenStreetMap",
-            "blue:blue_stripe",
-            "moderate",
-            "A test trail",
-            new ArrayList<>(),
-            coords
-        );
+                id,
+                "Test Trail " + id,
+                "hiking",
+                "01MN",
+                "lwn",
+                "OpenStreetMap",
+                "blue:blue_stripe",
+                "moderate",
+                "A test trail",
+                new ArrayList<>(),
+                coords);
     }
 }

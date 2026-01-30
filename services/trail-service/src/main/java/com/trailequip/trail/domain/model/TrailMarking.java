@@ -8,9 +8,9 @@ import jakarta.persistence.*;
  * Example: "blue:blue_stripe", "red:red_triangle", "yellow:yellow_cross"
  */
 @Entity
-@Table(name = "trail_markings", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "osmc_symbol")
-})
+@Table(
+        name = "trail_markings",
+        uniqueConstraints = {@UniqueConstraint(columnNames = "osmc_symbol")})
 public class TrailMarking {
 
     @Id
@@ -18,19 +18,19 @@ public class TrailMarking {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
-    private String osmc_symbol;  // Full OSMC symbol string
+    private String osmc_symbol; // Full OSMC symbol string
 
     @Enumerated(EnumType.STRING)
-    private MarkingColor color;  // BLUE, RED, YELLOW, GREEN, WHITE, ORANGE, BLACK, PURPLE
+    private MarkingColor color; // BLUE, RED, YELLOW, GREEN, WHITE, ORANGE, BLACK, PURPLE
 
     @Enumerated(EnumType.STRING)
-    private MarkingShape shape;  // STRIPE, TRIANGLE, CROSS, DOT, RECTANGLE, ARCH, NONE
+    private MarkingShape shape; // STRIPE, TRIANGLE, CROSS, DOT, RECTANGLE, ARCH, NONE
 
     @Column(length = 20)
-    private String hexColor;  // e.g., "#0000FF" for blue
+    private String hexColor; // e.g., "#0000FF" for blue
 
     @Column(columnDefinition = "TEXT")
-    private String description;  // "Blue striped main trail", etc.
+    private String description; // "Blue striped main trail", etc.
 
     // ===== ENUMS =====
 
@@ -56,13 +56,13 @@ public class TrailMarking {
     }
 
     public enum MarkingShape {
-        STRIPE("━"),      // Horizontal stripe
-        TRIANGLE("▲"),    // Triangle/pyramid
-        CROSS("✛"),       // Plus sign cross
-        DOT("●"),         // Circle dot
-        RECTANGLE("■"),   // Square rectangle
-        ARCH("⌢"),        // Arc
-        NONE("");         // No symbol
+        STRIPE("━"), // Horizontal stripe
+        TRIANGLE("▲"), // Triangle/pyramid
+        CROSS("✛"), // Plus sign cross
+        DOT("●"), // Circle dot
+        RECTANGLE("■"), // Square rectangle
+        ARCH("⌢"), // Arc
+        NONE(""); // No symbol
 
         private final String symbol;
 

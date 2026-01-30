@@ -8,11 +8,13 @@ import java.util.UUID;
  * Can be a shelter, peak, water source, junction, or scenic viewpoint.
  */
 @Entity
-@Table(name = "trail_waypoints", indexes = {
-    @Index(name = "idx_trail_id", columnList = "trail_id"),
-    @Index(name = "idx_osm_node_id", columnList = "osm_node_id"),
-    @Index(name = "idx_waypoint_type", columnList = "type")
-})
+@Table(
+        name = "trail_waypoints",
+        indexes = {
+            @Index(name = "idx_trail_id", columnList = "trail_id"),
+            @Index(name = "idx_osm_node_id", columnList = "osm_node_id"),
+            @Index(name = "idx_waypoint_type", columnList = "type")
+        })
 public class Waypoint {
 
     @Id
@@ -24,10 +26,10 @@ public class Waypoint {
     private Trail trail;
 
     @Column(name = "osm_node_id")
-    private Long osmNodeId;  // OpenStreetMap node ID
+    private Long osmNodeId; // OpenStreetMap node ID
 
     @Column(nullable = false)
-    private Integer sequenceOrder;  // Order along trail
+    private Integer sequenceOrder; // Order along trail
 
     @Column(nullable = false)
     private Double latitude;
@@ -36,10 +38,10 @@ public class Waypoint {
     private Double longitude;
 
     @Column(nullable = false)
-    private Integer elevation;  // in meters
+    private Integer elevation; // in meters
 
     @Column(nullable = false)
-    private String name;  // "Cabana Piatra Arsă", "Vârful Omu", etc.
+    private String name; // "Cabana Piatra Arsă", "Vârful Omu", etc.
 
     @Enumerated(EnumType.STRING)
     private WaypointType type;
@@ -87,8 +89,7 @@ public class Waypoint {
         this.elevation = elevation;
     }
 
-    public Waypoint(Double latitude, Double longitude, Integer elevation,
-                   String name, WaypointType type) {
+    public Waypoint(Double latitude, Double longitude, Integer elevation, String name, WaypointType type) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.elevation = elevation;

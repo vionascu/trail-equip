@@ -2,12 +2,8 @@ package com.trailequip.trail.infrastructure.overpass;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.*;
-import java.util.stream.Collectors;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.LineString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 public class OverpassApiClient {
 
     private static final String OVERPASS_API_URL = "https://overpass-api.de/api/interpreter";
-    private static final long REQUEST_DELAY_MS = 3000;  // Rate limiting for Overpass API
+    private static final long REQUEST_DELAY_MS = 3000; // Rate limiting for Overpass API
     private static final int MAX_RETRIES = 3;
     private static final int TIMEOUT_MS = 60000;
 
@@ -70,10 +66,7 @@ public class OverpassApiClient {
      * @return OverpassRelation object or null if not found
      */
     public OverpassRelation queryTrailById(Long relationId) {
-        String query = String.format(
-            "[out:json];relation(%d);out geom;",
-            relationId
-        );
+        String query = String.format("[out:json];relation(%d);out geom;", relationId);
         List<OverpassRelation> results = executeQuery(query);
         return results.isEmpty() ? null : results.get(0);
     }
@@ -103,16 +96,14 @@ public class OverpassApiClient {
      */
     private String buildHikingRoutesQuery(double south, double west, double north, double east) {
         return String.format(
-            "[out:json];" +
-            "[bbox:%f,%f,%f,%f];" +
-            "(" +
-            "  relation[type=route][route=hiking];" +
-            "  relation[type=route][route=foot];" +
-            "  relation[type=route][route=alpine_hiking];" +
-            ");" +
-            "out geom;",
-            south, west, north, east
-        );
+                "[out:json];" + "[bbox:%f,%f,%f,%f];"
+                        + "("
+                        + "  relation[type=route][route=hiking];"
+                        + "  relation[type=route][route=foot];"
+                        + "  relation[type=route][route=alpine_hiking];"
+                        + ");"
+                        + "out geom;",
+                south, west, north, east);
     }
 
     /**
@@ -127,7 +118,8 @@ public class OverpassApiClient {
                 return parseResponse(response);
             } catch (Exception e) {
                 if (attempt == MAX_RETRIES - 1) {
-                    throw new OverpassApiException("Failed to query Overpass API after " + MAX_RETRIES + " attempts", e);
+                    throw new OverpassApiException(
+                            "Failed to query Overpass API after " + MAX_RETRIES + " attempts", e);
                 }
                 // Exponential backoff before retry
                 try {
@@ -164,7 +156,8 @@ public class OverpassApiClient {
 
         // Check for errors in response
         if (root.has("remark")) {
-            throw new OverpassApiException("Overpass API error: " + root.get("remark").asText());
+            throw new OverpassApiException(
+                    "Overpass API error: " + root.get("remark").asText());
         }
 
         JsonNode elements = root.get("elements");
@@ -243,9 +236,7 @@ public class OverpassApiClient {
         }
 
         return new OverpassRelation(
-            id, name, route, ref, network, operator, osmcSymbol,
-            difficulty, description, memberIds, coordinates
-        );
+                id, name, route, ref, network, operator, osmcSymbol, difficulty, description, memberIds, coordinates);
     }
 
     /**
@@ -281,10 +272,8 @@ public class OverpassApiClient {
         Set<Long> used = new HashSet<>();
 
         // Start with first way
-        long currentWayId = memberIds.stream()
-            .filter(ways::containsKey)
-            .findFirst()
-            .orElse(memberIds.get(0));
+        long currentWayId =
+                memberIds.stream().filter(ways::containsKey).findFirst().orElse(memberIds.get(0));
 
         OverpassWay currentWay = ways.get(currentWayId);
         if (currentWay != null) {
@@ -309,7 +298,8 @@ public class OverpassApiClient {
 
                 // Check if way connects to current endpoint
                 Coordinate wayStart = way.getCoordinates().get(0);
-                Coordinate wayEnd = way.getCoordinates().get(way.getCoordinates().size() - 1);
+                Coordinate wayEnd =
+                        way.getCoordinates().get(way.getCoordinates().size() - 1);
 
                 if (coordinatesMatch(lastCoord, wayStart)) {
                     combined.addAll(way.getCoordinates());
@@ -346,9 +336,8 @@ public class OverpassApiClient {
      * Check if two coordinates are approximately equal (within 0.0001 degrees).
      */
     private boolean coordinatesMatch(Coordinate c1, Coordinate c2) {
-        double tolerance = 0.0001;  // ~11 meters
-        return Math.abs(c1.getX() - c2.getX()) < tolerance &&
-               Math.abs(c1.getY() - c2.getY()) < tolerance;
+        double tolerance = 0.0001; // ~11 meters
+        return Math.abs(c1.getX() - c2.getX()) < tolerance && Math.abs(c1.getY() - c2.getY()) < tolerance;
     }
 
     /**

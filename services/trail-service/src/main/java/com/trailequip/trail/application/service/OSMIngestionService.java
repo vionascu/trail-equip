@@ -44,17 +44,17 @@ public class OSMIngestionService {
 
             // Normalize to domain objects
             List<Trail> trails = relations.stream()
-                .map(relation -> {
-                    try {
-                        return trailNormalizer.normalizeToDomain(relation);
-                    } catch (Exception e) {
-                        log.warn("Failed to normalize trail {}: {}", relation.getId(), e.getMessage());
-                        result.incrementFailed();
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                    .map(relation -> {
+                        try {
+                            return trailNormalizer.normalizeToDomain(relation);
+                        } catch (Exception e) {
+                            log.warn("Failed to normalize trail {}: {}", relation.getId(), e.getMessage());
+                            result.incrementFailed();
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
             result.setNormalized(trails.size());
             log.info("Normalized {} trails to domain objects", trails.size());
@@ -96,17 +96,17 @@ public class OSMIngestionService {
             result.setFetched(relations.size());
 
             List<Trail> trails = relations.stream()
-                .map(r -> {
-                    try {
-                        return trailNormalizer.normalizeToDomain(r);
-                    } catch (Exception e) {
-                        log.warn("Failed to normalize trail: {}", e.getMessage());
-                        result.incrementFailed();
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                    .map(r -> {
+                        try {
+                            return trailNormalizer.normalizeToDomain(r);
+                        } catch (Exception e) {
+                            log.warn("Failed to normalize trail: {}", e.getMessage());
+                            result.incrementFailed();
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
             trails = deduplicateByOsmId(trails);
             trails = validateTrails(trails, result);
@@ -158,16 +158,16 @@ public class OSMIngestionService {
             result.setFetched(relations.size());
 
             List<Trail> trails = relations.stream()
-                .map(r -> {
-                    try {
-                        return trailNormalizer.normalizeToDomain(r);
-                    } catch (Exception e) {
-                        result.incrementFailed();
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                    .map(r -> {
+                        try {
+                            return trailNormalizer.normalizeToDomain(r);
+                        } catch (Exception e) {
+                            result.incrementFailed();
+                            return null;
+                        }
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
             trails = deduplicateByOsmId(trails);
             trails = validateTrails(trails, result);
@@ -204,17 +204,17 @@ public class OSMIngestionService {
      */
     private List<Trail> validateTrails(List<Trail> trails, IngestionResult result) {
         return trails.stream()
-            .filter(trail -> {
-                try {
-                    validateTrail(trail);
-                    return true;
-                } catch (ValidationException e) {
-                    log.warn("Trail validation failed {}: {}", trail.getOsmId(), e.getMessage());
-                    result.incrementFailed();
-                    return false;
-                }
-            })
-            .collect(Collectors.toList());
+                .filter(trail -> {
+                    try {
+                        validateTrail(trail);
+                        return true;
+                    } catch (ValidationException e) {
+                        log.warn("Trail validation failed {}: {}", trail.getOsmId(), e.getMessage());
+                        result.incrementFailed();
+                        return false;
+                    }
+                })
+                .collect(Collectors.toList());
     }
 
     /**
@@ -330,44 +330,88 @@ public class OSMIngestionService {
         }
 
         // Getters and setters
-        public boolean isSuccess() { return success; }
-        public void setSuccess(boolean success) { this.success = success; }
+        public boolean isSuccess() {
+            return success;
+        }
 
-        public int getFetched() { return fetched; }
-        public void setFetched(int fetched) { this.fetched = fetched; }
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
 
-        public int getNormalized() { return normalized; }
-        public void setNormalized(int normalized) { this.normalized = normalized; }
+        public int getFetched() {
+            return fetched;
+        }
 
-        public int getDeduplicated() { return deduplicated; }
-        public void setDeduplicated(int deduplicated) { this.deduplicated = deduplicated; }
+        public void setFetched(int fetched) {
+            this.fetched = fetched;
+        }
 
-        public int getValidated() { return validated; }
-        public void setValidated(int validated) { this.validated = validated; }
+        public int getNormalized() {
+            return normalized;
+        }
 
-        public int getCreated() { return created; }
-        public void setCreated(int created) { this.created = created; }
+        public void setNormalized(int normalized) {
+            this.normalized = normalized;
+        }
 
-        public int getUpdated() { return updated; }
-        public void setUpdated(int updated) { this.updated = updated; }
+        public int getDeduplicated() {
+            return deduplicated;
+        }
 
-        public int getFailed() { return failed; }
-        public void setFailed(int failed) { this.failed = failed; }
+        public void setDeduplicated(int deduplicated) {
+            this.deduplicated = deduplicated;
+        }
 
-        public String getErrorMessage() { return errorMessage; }
-        public void setErrorMessage(String errorMessage) { this.errorMessage = errorMessage; }
+        public int getValidated() {
+            return validated;
+        }
+
+        public void setValidated(int validated) {
+            this.validated = validated;
+        }
+
+        public int getCreated() {
+            return created;
+        }
+
+        public void setCreated(int created) {
+            this.created = created;
+        }
+
+        public int getUpdated() {
+            return updated;
+        }
+
+        public void setUpdated(int updated) {
+            this.updated = updated;
+        }
+
+        public int getFailed() {
+            return failed;
+        }
+
+        public void setFailed(int failed) {
+            this.failed = failed;
+        }
+
+        public String getErrorMessage() {
+            return errorMessage;
+        }
+
+        public void setErrorMessage(String errorMessage) {
+            this.errorMessage = errorMessage;
+        }
 
         @Override
         public String toString() {
-            return "IngestionResult{" +
-                "success=" + success +
-                ", fetched=" + fetched +
-                ", normalized=" + normalized +
-                ", deduplicated=" + deduplicated +
-                ", created=" + created +
-                ", updated=" + updated +
-                ", failed=" + failed +
-                '}';
+            return "IngestionResult{" + "success="
+                    + success + ", fetched="
+                    + fetched + ", normalized="
+                    + normalized + ", deduplicated="
+                    + deduplicated + ", created="
+                    + created + ", updated="
+                    + updated + ", failed="
+                    + failed + '}';
         }
     }
 

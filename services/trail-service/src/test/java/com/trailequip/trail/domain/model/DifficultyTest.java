@@ -1,10 +1,10 @@
 package com.trailequip.trail.domain.model;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit tests for Difficulty enum.
@@ -57,10 +57,10 @@ class DifficultyTest {
 
     @ParameterizedTest
     @CsvSource({
-        "400, 9.0, true",     // EASY matches
-        "600, 12.0, false",    // EASY doesn't match (elevation too high)
-        "1200, 18.0, true",    // MEDIUM matches
-        "1600, 25.0, true",    // HARD matches
+        "400, 9.0, true", // EASY matches
+        "600, 12.0, false", // EASY doesn't match (elevation too high)
+        "1200, 18.0, true", // MEDIUM matches
+        "1600, 25.0, true", // HARD matches
     })
     void shouldValidateMetricsAgainstDifficulty(int elevation, double slope, boolean shouldMatch) {
         boolean result = Difficulty.EASY.matches(elevation, slope);
