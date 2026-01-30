@@ -5,6 +5,7 @@ import com.trailequip.trail.domain.model.Difficulty;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,5 +31,5 @@ public interface TrailRepository extends JpaRepository<Trail, UUID> {
     List<Trail> findByDifficultyOrderByDistance(@Param("difficulty") Difficulty difficulty);
 
     @Query("SELECT t FROM Trail t WHERE t.source = :source ORDER BY t.createdAt DESC")
-    List<Trail> findRecentTrailsBySource(@Param("source") String source, @Param("limit") int limit);
+    List<Trail> findRecentTrailsBySource(@Param("source") String source, Pageable pageable);
 }

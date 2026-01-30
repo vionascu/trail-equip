@@ -35,6 +35,12 @@ public class StartupValidator implements ApplicationRunner {
     @Value("${overpass.rate-limit:3000}")
     private int overpassRateLimit;
 
+    @Value("${app.validation.postgis.enabled:true}")
+    private boolean postgisValidationEnabled;
+
+    @Value("${app.validation.schema.enabled:true}")
+    private boolean schemaValidationEnabled;
+
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("========================================");
@@ -44,8 +50,16 @@ public class StartupValidator implements ApplicationRunner {
         try {
             validateEnvironmentVariables();
             validateDatabaseConnection();
-            validatePostGISExtension();
-            validateDatabaseSchema();
+            if (postgisValidationEnabled) {
+                validatePostGISExtension();
+            } else {
+                log.warn("⚠ PostGIS validation disabled (development mode)");
+            }
+            if (schemaValidationEnabled) {
+                validateDatabaseSchema();
+            } else {
+                log.warn("⚠ Database schema validation disabled (Hibernate will manage)");
+            }
             validateConfiguration();
 
             log.info("========================================");
@@ -68,8 +82,7 @@ public class StartupValidator implements ApplicationRunner {
         String[] requiredVars = {
             "DATABASE_URL",
             "POSTGRES_DB",
-            "POSTGRES_USER",
-            "POSTGRES_PASSWORD"
+            "POSTGRES_USER"
         };
 
         for (String var : requiredVars) {
@@ -78,6 +91,14 @@ public class StartupValidator implements ApplicationRunner {
                 throw new IllegalStateException("Required environment variable not set: " + var);
             }
             log.debug("  ✓ {} set", var);
+        }
+
+        // POSTGRES_PASSWORD is optional (can be empty for local development)
+        String password = System.getenv("POSTGRES_PASSWORD");
+        if (password != null) {
+            log.debug("  ✓ POSTGRES_PASSWORD set");
+        } else {
+            log.warn("  ⚠ POSTGRES_PASSWORD not set (using empty password)");
         }
 
         log.info("✓ Environment variables validated");
