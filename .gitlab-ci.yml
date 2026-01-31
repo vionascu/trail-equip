@@ -2,6 +2,9 @@ variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   DOCKER_DRIVER: overlay2
   GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
+  DOCKER_REGISTRY: $CI_REGISTRY
+  DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE
+  DOCKER_IMAGE_TAG: $CI_COMMIT_SHA
 
 stages:
   - build
@@ -84,15 +87,67 @@ package_docker:
   image: docker:24-dind
   services:
     - docker:24-dind
+  variables:
+    FF_USE_FASTZIP: "true"
+    TRANSFER_METER_FREQUENCY: "5s"
+    ARTIFACT_COMPRESSION_LEVEL: "fastest"
   script:
-    - echo "Docker images would be built and pushed here"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG -t $DOCKER_IMAGE_NAME:latest .
+    - docker push $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+    - docker push $DOCKER_IMAGE_NAME:latest
   only:
     - main
+
+# DEPLOY STAGE - Docker Compose Deployment (Example for self-hosted)
+deploy_docker:
+  stage: deploy
+  image: alpine:latest
+  script:
+    - apk add --no-cache curl docker-cli
+    - echo "Docker images built and pushed to registry"
+    - echo "Images available at:"
+    - echo "  $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
+    - echo "  $DOCKER_IMAGE_NAME:latest"
+    - echo ""
+    - echo "To deploy locally, use:"
+    - echo "  docker-compose -f docker-compose.yml up -d"
+    - echo ""
+    - echo "To deploy to a remote server, configure SSH and push to your deployment environment"
+  only:
+    - main
+  when: manual
+
+# Alternative: Deploy to cloud services (examples commented out)
+# Uncomment and configure for your chosen platform
+
+# deploy_heroku:
+#   stage: deploy
+#   image: alpine:latest
+#   script:
+#     - apk add --no-cache git
+#     - git remote add heroku https://git.heroku.com/your-app-name.git
+#     - git push -f heroku main
+#   only:
+#     - main
+#   when: manual
+
+# deploy_aws:
+#   stage: deploy
+#   image: alpine:latest
+#   script:
+#     - apk add --no-cache aws-cli
+#     - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
+#     - docker tag $DOCKER_IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trailequip:latest
+#     - docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trailequip:latest
+#   only:
+#     - main
+#   when: manual
 
 deploy_docs:
   stage: deploy
   image: alpine:latest
   script:
-    - echo "Documentation deployment step"
+    - echo "Documentation deployment: docs are available in the repository"
   only:
     - main
