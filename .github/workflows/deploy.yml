@@ -5,9 +5,10 @@ on:
     branches: [main]
 
 jobs:
+  # ========== STAGE 1: BUILD ==========
   build:
+    name: Build Java & Frontend
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
 
@@ -23,22 +24,69 @@ jobs:
             trail-equip:latest
             trail-equip:${{ github.sha }}
 
-      - name: Log success
+  # ========== STAGE 2: TEST ==========
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Run unit & integration tests
         run: |
-          echo "✅ SUCCESS - Docker image built successfully!"
+          cd /Users/viionascu/Projects/TrailEquip
+          ./gradlew test --info
+
+      - name: Build project
+        run: |
+          cd /Users/viionascu/Projects/TrailEquip
+          ./gradlew build -x test
+
+  # ========== STAGE 3: DEPLOY ==========
+  deploy:
+    name: Deploy Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Docker image for deployment
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
+          tags: |
+            trail-equip:latest
+            trail-equip:${{ github.sha }}
+
+      - name: Log deployment success
+        run: |
+          echo "✅ PIPELINE SUCCESS - All stages completed!"
           echo ""
-          echo "Build Details:"
+          echo "📊 Build Details:"
           echo "  Repository: ${{ github.repository }}"
           echo "  Commit: ${{ github.sha }}"
           echo "  Branch: ${{ github.ref }}"
           echo ""
-          echo "Image built locally (push to registry handled by Railway)"
+          echo "✅ Stage 1: Build - Docker image compiled"
+          echo "✅ Stage 2: Test  - Unit tests passed"
+          echo "✅ Stage 3: Deploy - Docker image ready"
           echo ""
-          echo "Next step: Connect to Railway for auto-deployment"
+          echo "🚀 Next step: Connect to Railway for auto-deployment"
           echo "  1. Visit: https://railway.app"
           echo "  2. Create New Project"
           echo "  3. Deploy from GitHub"
           echo "  4. Select: vionascu/trail-equip"
           echo "  5. Railway will build and deploy automatically"
           echo ""
-          echo "GitHub Actions: ✅ Build passing (unlimited minutes)"
+          echo "⏱️  GitHub Actions: ✅ Unlimited CI/CD minutes"
