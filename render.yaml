@@ -21,7 +21,7 @@ services:
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
       - key: SPRING_JPA_DATABASE_PLATFORM
-        value: org.hibernate.dialect.PostgreSQL10Dialect
+        value: org.hibernate.dialect.PostgreSQLDialect
 
 databases:
   - name: trail-equip-db
