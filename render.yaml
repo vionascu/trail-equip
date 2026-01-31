@@ -1,3 +1,4 @@
+# Force redeploy with improved entrypoint.sh that passes datasource URL as Java system property
 services:
   - type: web
     name: trail-equip
