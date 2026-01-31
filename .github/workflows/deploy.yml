@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,33 +14,31 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Push Docker image
+      - name: Build Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
-          push: true
+          push: false
           tags: |
-            ghcr.io/${{ github.repository }}:latest
-            ghcr.io/${{ github.repository }}:${{ github.sha }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache
-          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}:buildcache,mode=max
+            trail-equip:latest
+            trail-equip:${{ github.sha }}
 
-      - name: Log deployment info
+      - name: Log success
         run: |
-          echo "✅ SUCCESS - Docker image built and pushed!"
+          echo "✅ SUCCESS - Docker image built successfully!"
           echo ""
-          echo "Image available at:"
-          echo "  ghcr.io/${{ github.repository }}:latest"
-          echo "  ghcr.io/${{ github.repository }}:${{ github.sha }}"
+          echo "Build Details:"
+          echo "  Repository: ${{ github.repository }}"
+          echo "  Commit: ${{ github.sha }}"
+          echo "  Branch: ${{ github.ref }}"
           echo ""
-          echo "GitHub Actions compute minutes: UNLIMITED ✅"
+          echo "Image built locally (push to registry handled by Railway)"
           echo ""
           echo "Next step: Connect to Railway for auto-deployment"
-          echo "Visit: https://railway.app"
+          echo "  1. Visit: https://railway.app"
+          echo "  2. Create New Project"
+          echo "  3. Deploy from GitHub"
+          echo "  4. Select: vionascu/trail-equip"
+          echo "  5. Railway will build and deploy automatically"
+          echo ""
+          echo "GitHub Actions: ✅ Build passing (unlimited minutes)"
