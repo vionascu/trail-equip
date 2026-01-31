@@ -127,7 +127,7 @@ public class TrailControllerTest {
                         .content(objectMapper.writeValueAsString(newTrail)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Sphinx Ridge Scramble"))
-                .andExpect(jsonPath("$.difficulty").value("ROCK_CLIMBING"));
+                .andExpect(jsonPath("$.difficulty").value("SCRAMBLING"));
 
         verify(trailApplicationService, times(1)).createTrail(any(Trail.class));
     }

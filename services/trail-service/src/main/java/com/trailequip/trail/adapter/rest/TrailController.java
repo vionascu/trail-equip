@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(
         origins = "http://localhost:3001",
         allowedHeaders = "*",
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class TrailController {
 
     private final TrailApplicationService trailApplicationService;
@@ -50,6 +50,14 @@ public class TrailController {
     public ResponseEntity<Trail> createTrail(@RequestBody Trail trail) {
         Trail created = trailApplicationService.createTrail(trail);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    }
+
+    @PutMapping("/{id}")
+    @Operation(summary = "Update trail")
+    public ResponseEntity<Trail> updateTrail(@PathVariable UUID id, @RequestBody Trail trail) {
+        trail.setId(id);
+        Trail updated = trailApplicationService.updateTrail(trail);
+        return ResponseEntity.ok(updated);
     }
 
     @PostMapping("/suggest")

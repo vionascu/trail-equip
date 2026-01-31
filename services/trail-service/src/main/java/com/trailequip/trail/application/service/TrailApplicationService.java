@@ -44,6 +44,24 @@ public class TrailApplicationService {
         return trailRepository.findTrailsInArea(difficulty);
     }
 
+    public Trail updateTrail(Trail trail) {
+        Optional<Trail> existing = trailRepository.findById(trail.getId());
+        if (existing.isPresent()) {
+            Trail toUpdate = existing.get();
+            if (trail.getName() != null) toUpdate.setName(trail.getName());
+            if (trail.getDescription() != null) toUpdate.setDescription(trail.getDescription());
+            if (trail.getDifficulty() != null) toUpdate.setDifficulty(trail.getDifficulty());
+            if (trail.getDistance() > 0) toUpdate.setDistance(trail.getDistance());
+            if (trail.getElevationGain() >= 0) toUpdate.setElevationGain(trail.getElevationGain());
+            if (trail.getElevationLoss() >= 0) toUpdate.setElevationLoss(trail.getElevationLoss());
+            if (trail.getMaxSlope() >= 0) toUpdate.setMaxSlope(trail.getMaxSlope());
+            if (trail.getLatitude() != 0) toUpdate.setLatitude(trail.getLatitude());
+            if (trail.getLongitude() != 0) toUpdate.setLongitude(trail.getLongitude());
+            return trailRepository.save(toUpdate);
+        }
+        return trailRepository.save(trail);
+    }
+
     public void deleteTrail(UUID id) {
         trailRepository.deleteById(id);
     }

@@ -10,15 +10,15 @@ import jakarta.persistence.*;
 @Entity
 @Table(
         name = "trail_markings",
-        uniqueConstraints = {@UniqueConstraint(columnNames = "osmc_symbol")})
+        uniqueConstraints = {@UniqueConstraint(columnNames = "osmcSymbol")})
 public class TrailMarking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String osmc_symbol; // Full OSMC symbol string
+    @Column(name = "osmcSymbol", nullable = false, unique = true, length = 100)
+    private String osmcSymbol; // Full OSMC symbol string
 
     @Enumerated(EnumType.STRING)
     private MarkingColor color; // BLUE, RED, YELLOW, GREEN, WHITE, ORANGE, BLACK, PURPLE
@@ -79,8 +79,8 @@ public class TrailMarking {
 
     public TrailMarking() {}
 
-    public TrailMarking(String osmc_symbol, MarkingColor color, MarkingShape shape) {
-        this.osmc_symbol = osmc_symbol;
+    public TrailMarking(String osmcSymbol, MarkingColor color, MarkingShape shape) {
+        this.osmcSymbol = osmcSymbol;
         this.color = color;
         this.shape = shape;
         this.hexColor = color.getHex();
@@ -94,7 +94,7 @@ public class TrailMarking {
     }
 
     public String getOsmcSymbol() {
-        return osmc_symbol;
+        return osmcSymbol;
     }
 
     public MarkingColor getColor() {
@@ -115,8 +115,8 @@ public class TrailMarking {
 
     // ===== SETTERS =====
 
-    public void setOsmcSymbol(String osmc_symbol) {
-        this.osmc_symbol = osmc_symbol;
+    public void setOsmcSymbol(String osmcSymbol) {
+        this.osmcSymbol = osmcSymbol;
     }
 
     public void setColor(MarkingColor color) {
