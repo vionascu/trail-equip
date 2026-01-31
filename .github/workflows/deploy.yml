@@ -41,11 +41,9 @@ jobs:
 
       - name: Run unit & integration tests
         run: ./gradlew test --info
-        working-directory: ./services/trail-service
 
       - name: Build project
         run: ./gradlew build -x test
-        working-directory: ./services/trail-service
 
   # ========== STAGE 3: DEPLOY ==========
   deploy:
