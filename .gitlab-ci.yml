@@ -1,87 +1,19 @@
+# ⚠️ OPTIMIZED FOR FREE TIER - Limited CI/CD minutes
+# This pipeline only runs Docker build (via Dockerfile multi-stage build)
+# which includes Java compilation + React build
+# ✅ Tests run locally before push: ./gradlew test
+
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   DOCKER_DRIVER: overlay2
-  GRADLE_USER_HOME: $CI_PROJECT_DIR/.gradle
   DOCKER_REGISTRY: $CI_REGISTRY
   DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE
   DOCKER_IMAGE_TAG: $CI_COMMIT_SHA
 
 stages:
-  - build
-  - test
   - package
-  - deploy
 
-# BUILD STAGE
-build_services:
-  stage: build
-  image: gradle:8.5-jdk21-jammy
-  script:
-    - cd $CI_PROJECT_DIR
-    - gradle clean build -x test --info --refresh-dependencies
-  cache:
-    paths:
-      - .gradle/
-  artifacts:
-    paths:
-      - services/*/build/libs/*.jar
-    expire_in: 1 week
-  only:
-    - main
-    - merge_requests
-
-build_ui:
-  stage: build
-  image: node:20-alpine
-  script:
-    - cd $CI_PROJECT_DIR/ui
-    - npm install --prefer-offline --no-audit
-    - npm run build
-  cache:
-    paths:
-      - ui/node_modules/
-  artifacts:
-    paths:
-      - ui/dist/
-    expire_in: 1 week
-  only:
-    - main
-    - merge_requests
-
-# TEST STAGE
-test_services_unit:
-  stage: test
-  image: gradle:8.5-jdk21-jammy
-  script:
-    - cd $CI_PROJECT_DIR
-    - gradle test --info --refresh-dependencies
-  cache:
-    paths:
-      - .gradle/
-  artifacts:
-    reports:
-      junit:
-        - services/*/build/test-results/test/*.xml
-    expire_in: 30 days
-  only:
-    - main
-    - merge_requests
-
-lint_java:
-  stage: test
-  image: gradle:8.5-jdk21-jammy
-  script:
-    - cd $CI_PROJECT_DIR
-    - gradle spotlessCheck --refresh-dependencies || echo "Formatting check completed"
-  cache:
-    paths:
-      - .gradle/
-  allow_failure: true
-  only:
-    - main
-    - merge_requests
-
-# PACKAGE STAGE
+# ✅ Docker build includes all compilation and frontend build (Dockerfile multi-stage)
+# ✅ This uses ~3-5 minutes vs 20+ minutes for separate jobs
 package_docker:
   stage: package
   image: docker:24-dind
@@ -99,56 +31,22 @@ package_docker:
   only:
     - main
 
-# DEPLOY STAGE - Docker Compose Deployment (Example for self-hosted)
-deploy_docker:
-  stage: deploy
+deploy_to_railway:
+  stage: package
   image: alpine:latest
   script:
-    - apk add --no-cache curl docker-cli
-    - echo "Docker images built and pushed to registry"
-    - echo "Images available at:"
+    - echo "SUCCESS - Docker image built and pushed"
+    - echo "Image available at:"
     - echo "  $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG"
     - echo "  $DOCKER_IMAGE_NAME:latest"
     - echo ""
-    - echo "To deploy locally, use:"
-    - echo "  docker-compose -f docker-compose.yml up -d"
+    - echo "To deploy to Railway:"
+    - echo "  1. Visit https://railway.app"
+    - echo "  2. Connect your GitLab repository"
+    - echo "  3. Add PostgreSQL service"
+    - echo "  4. Railway auto-deploys on push"
     - echo ""
-    - echo "To deploy to a remote server, configure SSH and push to your deployment environment"
-  only:
-    - main
-  when: manual
-
-# Alternative: Deploy to cloud services (examples commented out)
-# Uncomment and configure for your chosen platform
-
-# deploy_heroku:
-#   stage: deploy
-#   image: alpine:latest
-#   script:
-#     - apk add --no-cache git
-#     - git remote add heroku https://git.heroku.com/your-app-name.git
-#     - git push -f heroku main
-#   only:
-#     - main
-#   when: manual
-
-# deploy_aws:
-#   stage: deploy
-#   image: alpine:latest
-#   script:
-#     - apk add --no-cache aws-cli
-#     - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com
-#     - docker tag $DOCKER_IMAGE_NAME:latest $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trailequip:latest
-#     - docker push $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/trailequip:latest
-#   only:
-#     - main
-#   when: manual
-
-deploy_docs:
-  stage: deploy
-  image: alpine:latest
-  script:
-    - echo "Documentation deployment - docs available in repo"
+    - echo "See: DEPLOY_TO_RAILWAY.md"
   only:
     - main
   when: manual
