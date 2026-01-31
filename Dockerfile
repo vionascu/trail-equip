@@ -51,7 +51,6 @@ ENV PORT=8080 \
     JAVA_OPTS="-Xmx512m -Xms256m"
 
 # Copy startup script that converts DATABASE_URL to JDBC format
-COPY entrypoint.sh /app/
-RUN chmod +x /app/entrypoint.sh
+COPY entrypoint.sh /app/entrypoint.sh
 
 ENTRYPOINT ["/app/entrypoint.sh"]
