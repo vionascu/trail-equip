@@ -22,11 +22,11 @@ if [ -n "$DATABASE_URL" ]; then
 
     # Check if host already has port, if not add default port 5432
     if echo "$HOST" | grep -q ":"; then
-      # Host already has port
-      SPRING_DATASOURCE_URL="jdbc:postgresql://${HOST}/${DATABASE}?sslmode=require"
+      # Host already has port - keep credentials and port together
+      SPRING_DATASOURCE_URL="jdbc:postgresql://${USER_PASS}@${HOST}/${DATABASE}?sslmode=require"
     else
-      # Add default PostgreSQL port
-      SPRING_DATASOURCE_URL="jdbc:postgresql://${HOST}:5432/${DATABASE}?sslmode=require"
+      # Add default PostgreSQL port 5432
+      SPRING_DATASOURCE_URL="jdbc:postgresql://${USER_PASS}@${HOST}:5432/${DATABASE}?sslmode=require"
     fi
 
     echo "🔌 Converted to JDBC format: $SPRING_DATASOURCE_URL" | sed 's/:\/\/.*@/:\/\/***@/'
